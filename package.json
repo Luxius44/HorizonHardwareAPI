@@ -1,0 +1,30 @@
+{
+  "name": "03_serveur_mvc_joi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "prisma generate; prisma db push; nodemon startServer.mjs",
+    "test": "rm ./prisma/maTestDB.db; prisma generate --schema ./prisma/schema-test.prisma; prisma db push --schema ./prisma/schema-test.prisma; c8 nyc  mocha --timeout 10000 --cahe off"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^21.2.0",
+    "@hapi/inert": "^7.0.0",
+    "@hapi/vision": "^7.0.0",
+    "@prisma/client": "^4.9.0",
+    "c8": "^7.12.0",
+    "chai-http": "^4.3.0",
+    "hapi-swagger": "^15.0.0",
+    "joi": "^17.7.0",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "prisma": "^4.9.0"
+  }
+}
+

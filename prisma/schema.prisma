@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./maDB.db"
+}
+
+model Admin {
+  login   String  @id
+  password    String
+}
+
+model Categorie {
+  id    Int @id @default(autoincrement())
+  nom   String
+  url   String
+  deals Deal[]
+}
+
+model Deal {
+  id    Int @id @default(autoincrement())
+  cat   Categorie @relation(fields: [catId],references: [id])
+  catId    Int
+  nom     String
+  prix    Float
+  promo   Float
+  date    DateTime
+  detail    String
+  url_img   String
+  url_web   String
+}
