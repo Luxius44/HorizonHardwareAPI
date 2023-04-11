@@ -197,8 +197,8 @@ const routes =[
 // Configuration Hapi :
 
 const server = Hapi.server({
-    port: 8080,
-    host: '172.31.47.60'
+    port: 3000,
+    host: 'localhost'
 });
 
 server.route(routes);
