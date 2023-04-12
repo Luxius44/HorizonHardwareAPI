@@ -17,8 +17,6 @@ const joiAdmin = Joi.object({
         password: Joi.string().required().description("must an non-empty ")
 }).description('User')
 
-const joiAdmins = Joi.array().items(joiAdmin).description("A collection of User")
-
 const joiCategorie = Joi.object({
     id: Joi.number().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
@@ -34,6 +32,17 @@ const joiCategories = Joi.array().items(joiCategorie).description("A collection 
 
 const joiDeal = Joi.object({
     id: Joi.number().required().description("id of the deal, autoincrement"),
+    catId : Joi.number().required().description("id of the categorie"),
+    nom: Joi.string().required().description("name of the deal"),
+    prix: Joi.number().required().description("price of the deal"),
+    promo: Joi.number().required().description("promo price of the deal"),
+    date : Joi.date().required().description("release date of the deal"),
+    detail : Joi.string().required().description("unique information link to this deal"),
+    imgId: Joi.string().required().description("id of the image of the categorie"),
+    urlWeb: Joi.string().required().description("url of the product")
+})
+
+const joiDealAdd = Joi.object({
     catId : Joi.number().required().description("id of the categorie"),
     nom: Joi.string().required().description("name of the deal"),
     prix: Joi.number().required().description("price of the deal"),
@@ -125,7 +134,7 @@ const routes =[
                 status: {
                     201 : joiToken.description("Le token permettant d'effectuer les actions liées au compte"),
                     404 : notFound,
-                    400 : notFound
+                    400 : errorMessage
                 }
             }
         },
@@ -246,6 +255,13 @@ const routes =[
             description: 'Get all the Deals',
             notes: 'Returns array of Deals',
             tags: ['api'],
+            response: {
+                status: {
+                    200 : joiDeals,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -263,6 +279,16 @@ const routes =[
             description: 'Get the deals associate to the categorieId',
             notes: 'Returns a Deals',
             tags: ['api'],
+            validate: {
+                params : Joi.object({categorieId:Joi.number().required().description("id of the categorie")}) 
+            },
+            response: {
+                status: {
+                    200 : joiDeals,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -281,8 +307,15 @@ const routes =[
             notes: 'Returns the added Deal',
             tags: ['api'],
             validate : {
-                payload : joiDeal
+                payload : joiDealAdd
             },
+            response: {
+                status: {
+                    200 : joiDeal,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -304,8 +337,15 @@ const routes =[
                 params: Joi.object({
                     id : Joi.number().required().description("id of the Deal")
                 }),
-                payload : joiDeal
+                payload : joiDealAdd
             },
+            response: {
+                status: {
+                    200 : joiDeal,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -320,9 +360,19 @@ const routes =[
         method : 'DELETE',
         path: '/deal/{id}',
         options: {
-            description: 'Delete Deal',
-            notes: 'Returns the deleted Categorie',
+            description: 'Delete the Deal',
+            notes: 'Returns the deleted Deal',
             tags: ['api'],
+            validate : {
+                params : joiId
+            },
+            response: {
+                status: {
+                    200 : joiDeal,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -341,6 +391,13 @@ const routes =[
             description: 'Get all Categories',
             notes: 'Returns array of Categories',
             tags: ['api'],
+            response: {
+                status: {
+                    200 : joiCategories,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -360,6 +417,13 @@ const routes =[
             tags: ['api'],
             validate: {
                 params : joiId
+            },
+            response: {
+                status: {
+                    200 : joiCategorie,
+                    404 : notFound,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -381,6 +445,13 @@ const routes =[
             validate : {
                 payload : joiCategorieAdd
             },
+            response: {
+                status: {
+                    200 : joiCategorie,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -402,6 +473,13 @@ const routes =[
                 params: joiId ,
                 payload : joiCategorieAdd
             },
+            response: {
+                status: {
+                    200 : joiCategorie,
+                    404 : notFound,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -421,6 +499,13 @@ const routes =[
             tags: ['api'],
             validate : {
                 params : joiId
+            },
+            response: {
+                status: {
+                    200 : joiCategorie,
+                    404 : notFound,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -440,6 +525,9 @@ const routes =[
             description: 'Get an Image by is id',
             notes: 'Returns an Image or an error if the id doesnt exist',
             tags: ['api'],
+            validate: {
+                params : Joi.object({filename:Joi.string().required().description("filename without the extension")})
+            },
         },
         handler: (request,h) => {
             try {
