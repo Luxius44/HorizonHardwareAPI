@@ -18,7 +18,7 @@ model Admin {
 model Categorie {
   id    Int @id @default(autoincrement())
   nom   String
-  url   String
+  imgId String
   deals Deal[]
 }
 

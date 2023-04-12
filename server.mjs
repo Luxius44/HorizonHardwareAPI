@@ -10,12 +10,38 @@ import HapiSwagger from 'hapi-swagger';
 
 import {adminController} from "./controler/controler.mjs";
 
-const joiUser = Joi.object({
+const joiAdmin = Joi.object({
         login: Joi.string().required().description("login must be unique"),
         password: Joi.string().required().description("must an non-empty ")
 }).description('User')
 
-const joiUsers = Joi.array().items(joiUser).description("A collection of User")
+const joiAdmins = Joi.array().items(joiAdmin).description("A collection of User")
+
+const joiCategorie = Joi.object({
+    id: Joi.number().required().description("id of the categorie, autoincrement"),
+    nom: Joi.string().required().description("name of the categorie"),
+    imgId: Joi.string().required().description("id of the image of the categorie")
+})
+
+const joiCategories = Joi.array().items(joiCategorie).description("A collection of Categorie")
+
+const joiDeal = Joi.object({
+    id: Joi.number().required().description("id of the deal, autoincrement"),
+    catId : Joi.number().required().description("id of the categorie"),
+    nom: Joi.string().required().description("name of the deal"),
+    prix: Joi.number().required().description("price of the deal"),
+    promo: Joi.number().required().description("promo price of the deal"),
+    date : Joi.date().required().description("release date of the deal"),
+    detail : Joi.string().required().description("unique information link to this deal"),
+    imgId: Joi.string().required().description("id of the image of the categorie"),
+    urlWeb: Joi.string().required().description("url of the product")
+})
+
+const joiDeals = Joi.array().items(joiDeal).description("A collection of Deal")
+
+const joiToken = Joi.object({
+    token: Joi.string().required().description("Le token associé au compte utilisateur")
+})
 
 const notFound = Joi.object({
     message: "not found"
@@ -33,6 +59,7 @@ const swaggerOptions = {
 };
 
 const routes =[
+    // Any :
     {
         method: '*',
         path: '/{any*}',
@@ -40,35 +67,12 @@ const routes =[
             return h.response({message: "not found"}).code(404)
         }
     },
+    // Admin :
     {
         method: 'GET',
-        path: '/user',
+        path: '/admin/{login}',
         options: {
-            description: 'Get User list',
-            notes: 'Returns an array of user',
-            tags: ['api'],
-            response: {
-                status: {
-                    200 : joiUsers
-                    }
-                }
-            },
-
-        handler: async (request, h) => {
-            //le message renvoyé et le code hhtp
-            try {
-                const  users = await adminController.findAll()
-                return h.response(users).code(200)
-            } catch (e) {
-                return h.response(e).code(400)
-            }
-        }
-    },
-    {
-        method: 'GET',
-        path: '/user/{login}',
-        options: {
-            description: 'Get User',
+            description: 'Get Admin',
             notes: 'Returns a user or un an error message',
             tags: ['api'],
             validate: {
@@ -80,13 +84,12 @@ const routes =[
             },
             response: {
                 status: {
-                    200 : joiUser,
+                    200 : joiAdmin,
                     404 : notFound
                 }
             }
-
-
         },
+        
         handler: async (request, h) => {
             try {
                 const user = await adminController.findByLogin(request.params.login)
@@ -100,18 +103,55 @@ const routes =[
         }
     },
     {
+        method: 'PUT',
+        path: '/admin/login',
+        options : {
+            description : 'Permet de se connecter à un compte existant',
+            notes : 'Permet de se connecter à un compte existant',
+            tags : ['api'],
+            validate: {
+                payload: joiAdmin
+            },
+            response: {
+                status: {
+                    201 : joiToken.description("Le token permettant d'effectuer les actions liées au compte"),
+                    404 : notFound,
+                    400 : notFound
+                }
+            }
+        },
+        handler: async (request, h) => {
+            try {
+                const user = request.payload
+
+                const token = await controller.login(user)
+                
+                if (token != null && !token.message) {
+                    return h.response(token).code(201)
+                } else if(token.message == "not found") {
+                    return h.response(token).code(404)
+                } else {
+                    return h.response(token).code(400)
+                }
+
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
         method: 'POST',
-        path: '/user',
+        path: '/admin/add',
         options: {
             description: 'Add User',
             notes: 'Returns added user',
             tags: ['api'],
             validate: {
-                payload: joiUser
+                payload: joiAdmin
             },
             response: {
                 status: {
-                    201 : joiUser,
+                    201 : joiAdmin,
                     400 : errorMessage
                 }
             }
@@ -130,7 +170,7 @@ const routes =[
     },
     {
         method: 'DELETE',
-        path: '/user/{login}',
+        path: '/admin/delete/{login}',
         options: {
             description: 'Delete User',
             notes: 'Returns the deleted user or un an error message',
@@ -144,7 +184,7 @@ const routes =[
             },
             response: {
                 status: {
-                    200 : joiUser,
+                    200 : joiAdmin,
                     404 : notFound
                 }
             }
@@ -160,7 +200,7 @@ const routes =[
         },
     {
         method: 'PUT',
-        path: '/user/{login}',
+        path: '/admin/update/{login}',
         options: {
             description: 'Update User',
             notes: 'Returns a user or un an error message',
@@ -171,16 +211,14 @@ const routes =[
                         .required()
                         .description('the login for the user'),
                 }),
-                payload: joiUser
+                payload: joiAdmin
             },
             response: {
                 status: {
-                    200 : joiUser,
+                    200 : joiAdmin,
                     400 : errorMessage
                 }
             }
-
-
         },
         handler: async (request, h) => {
             try {
@@ -191,9 +229,205 @@ const routes =[
             }
         }
     },
+    // Deal :
+    {
+        method : 'GET',
+        path: '/deal',
+        options: {
+            description: 'Get all the Deals',
+            notes: 'Returns array of Deals',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const deals = await dealController.findAll()
+                return deals
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path: '/deal/{categorieId}',
+        options: {
+            description: 'Get the deals associate to the categorieId',
+            notes: 'Returns a Deals',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const deals = await dealController.findByCatId(request.params.categorieId)
+                return deals
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path: '/deal',
+        options: {
+            description: 'Add Deal',
+            notes: 'Returns the added Deal',
+            tags: ['api'],
+            validate : {
+                payload : joiDeal
+            },
+        },
+        handler: async (request,h) => {
+            try {
+                const deal = await dealController.add(request.payload)
+                return deal
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'PUT',
+        path: '/deal/{id}',
+        options: {
+            description: 'Update Deal',
+            notes: 'Returns the updated Deal',
+            tags: ['api'],
+            validate : {
+                params: Joi.object({
+                    id : Joi.number().required().description("id of the Deal")
+                }),
+                payload : joiDeal
+            },
+        },
+        handler: async (request,h) => {
+            try {
+                const deal = await dealController.update(request.params.id,request.payload)
+                return deal
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'DELETE',
+        path: '/deal/{id}',
+        options: {
+            description: 'Delete Deal',
+            notes: 'Returns the deleted Categorie',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const categories = await categorieController.delete()
+                return categories
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    // Categorie :
+    {
+        method : 'GET',
+        path: '/categorie',
+        options: {
+            description: 'Get all Categories',
+            notes: 'Returns array of Categories',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const categories = await categorieController.findAll()
+                return categories
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path: '/categorie/{name}',
+        options: {
+            description: 'Get a Categorie by is name',
+            notes: 'Returns a Categorie',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const categorie = await categorieController.findByName(request.params.name)
+                return categorie
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path: '/categorie',
+        options: {
+            description: 'Add Categorie',
+            notes: 'Returns the added Categorie',
+            tags: ['api'],
+            validate : {
+                payload : joiCategorie
+            },
+        },
+        handler: async (request,h) => {
+            try {
+                const categorie = await categorieController.add(request.payload)
+                return categorie
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'PUT',
+        path: '/categorie/{name}',
+        options: {
+            description: 'Update Categorie',
+            notes: 'Returns the updated Categorie',
+            tags: ['api'],
+            validate : {
+                params: Joi.object({
+                    name : Joi.string().required().description("name of the categorie")
+                }),
+                payload : joiCategorie
+            },
+        },
+        handler: async (request,h) => {
+            try {
+                const categorie = await categorieController.update(request.params.name,request.payload)
+                return categorie
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'DELETE',
+        path: '/categorie',
+        options: {
+            description: 'Delete Categorie',
+            notes: 'Returns the deleted Categorie',
+            tags: ['api'],
+        },
+        handler: async (request,h) => {
+            try {
+                const categories = await categorieController.delete()
+                return categories
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    // Image :
     {
         method : 'GET',
         path: '/img/{filename}',
+        options: {
+            description: 'Get an Image by is id',
+            notes: 'Returns an Image or an error if the id doesnt exist',
+            tags: ['api'],
+        },
         handler: (request,h) => {
             try {
                 const filename = request.params.filename
