@@ -2,6 +2,7 @@
 
 import Hapi from '@hapi/hapi'
 import Joi from 'joi'
+import Path from 'path'
 
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision';
@@ -184,13 +185,24 @@ const routes =[
         handler: async (request, h) => {
             try {
                 const user = await adminController.update(request.params.login, request.payload)
-
                 return h.response(user).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
         }
-    }
+    },
+    {
+        method : 'GET',
+        path: '/img/{filename}',
+        handler: (request,h) => {
+            try {
+                const filename = request.params.filename
+                return h.file(`img/${filename}.jpg`)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
 ]
 
 

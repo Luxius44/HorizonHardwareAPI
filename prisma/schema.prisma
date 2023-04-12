@@ -31,6 +31,6 @@ model Deal {
   promo   Float
   date    DateTime
   detail    String
-  url_img   String
-  url_web   String
+  imgId   String
+  urlWeb   String
 }
