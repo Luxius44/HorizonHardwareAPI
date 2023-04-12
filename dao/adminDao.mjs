@@ -2,6 +2,8 @@
 import { PrismaClient } from '@prisma/client'
 
 import Admin from '../model/admin.mjs'
+import bcrypt from "bcryptjs";
+
 
 let prisma = new PrismaClient()
 
@@ -64,5 +66,5 @@ export const adminDao = {
         } catch (e) {
             return Promise.reject(e)
         }
-    }
+    },
 }

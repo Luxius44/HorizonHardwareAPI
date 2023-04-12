@@ -17,18 +17,22 @@ const joiAdmin = Joi.object({
         password: Joi.string().required().description("must an non-empty ")
 }).description('User')
 
+const joiAdminToken = Joi.object({
+    login: Joi.string().required().description("login must be unique"),
+    password: Joi.string().required().description("must an non-empty "),
+    token: Joi.string().required().description("User token")
+}).description('User with his token')
+
 const joiCategorie = Joi.object({
     id: Joi.number().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
     imgId: Joi.string().required().description("id of the image of the categorie")
-})
+}).description('Categorie')
 
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
     imgId: Joi.string().required().description("id of the image of the categorie")
 })
-
-const joiCategories = Joi.array().items(joiCategorie).description("A collection of Categorie")
 
 const joiDeal = Joi.object({
     id: Joi.number().required().description("id of the deal, autoincrement"),
@@ -52,8 +56,6 @@ const joiDealAdd = Joi.object({
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })
-
-const joiDeals = Joi.array().items(joiDeal).description("A collection of Deal")
 
 const joiId = Joi.object({id : Joi.number().required().description("id of the object")})
 
@@ -82,7 +84,7 @@ const routes =[
         method: '*',
         path: '/{any*}',
         handler: function (request, h) {
-            return h.response({message: "not found"}).code(404)
+            return h.response({message:"not found"}).code(404)
         }
     },
     // Admin :
@@ -95,16 +97,8 @@ const routes =[
             tags: ['api'],
             validate: {
                 params: Joi.object({
-                    login : Joi.string()
-                        .required()
-                        .description('the login for the user'),
+                    login : Joi.string().required().description('the login for the user'),
                 })
-            },
-            response: {
-                status: {
-                    200 : joiAdmin,
-                    404 : notFound
-                }
             }
         },
         
@@ -129,20 +123,13 @@ const routes =[
             tags : ['api'],
             validate: {
                 payload: joiAdmin
-            },
-            response: {
-                status: {
-                    201 : joiToken.description("Le token permettant d'effectuer les actions liées au compte"),
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request, h) => {
             try {
-                const user = request.payload
+                const admin = request.payload
 
-                const token = await controller.login(user)
+                const token = await adminController.login(admin)
                 
                 if (token != null && !token.message) {
                     return h.response(token).code(201)
@@ -151,7 +138,6 @@ const routes =[
                 } else {
                     return h.response(token).code(400)
                 }
-
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -166,21 +152,13 @@ const routes =[
             tags: ['api'],
             validate: {
                 payload: joiAdmin
-            },
-            response: {
-                status: {
-                    201 : joiAdmin,
-                    400 : errorMessage
-                }
             }
-
         },
         handler: async (request, h) => {
             try {
-                //Le body est accessible via request.payload
-                const userToAdd = request.payload
-                const user = await adminController.add(userToAdd)
-                return h.response(user).code(201)
+                const adminToAdd = request.payload
+                const admin = await adminController.add(adminToAdd)
+                return h.response(admin).code(201)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -199,12 +177,6 @@ const routes =[
                         .required()
                         .description('the login for the user'),
                 })
-            },
-            response: {
-                status: {
-                    200 : joiAdmin,
-                    404 : notFound
-                }
             }
         },
         handler: async (request, h) => {
@@ -230,12 +202,6 @@ const routes =[
                         .description('the login for the user'),
                 }),
                 payload: joiAdmin
-            },
-            response: {
-                status: {
-                    200 : joiAdmin,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request, h) => {
@@ -255,18 +221,11 @@ const routes =[
             description: 'Get all the Deals',
             notes: 'Returns array of Deals',
             tags: ['api'],
-            response: {
-                status: {
-                    200 : joiDeals,
-                    404 : notFound,
-                    400 : errorMessage
-                }
-            }
         },
         handler: async (request,h) => {
             try {
                 const deals = await dealController.findAll()
-                return deals
+                return h.response(deals).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -281,19 +240,12 @@ const routes =[
             tags: ['api'],
             validate: {
                 params : Joi.object({categorieId:Joi.number().required().description("id of the categorie")}) 
-            },
-            response: {
-                status: {
-                    200 : joiDeals,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const deals = await dealController.findByCatId(request.params.categorieId)
-                return deals
+                return h.response(deals).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -308,19 +260,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 payload : joiDealAdd
-            },
-            response: {
-                status: {
-                    200 : joiDeal,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const deal = await dealController.add(request.payload)
-                return deal
+                return h.response(deal).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -338,19 +283,12 @@ const routes =[
                     id : Joi.number().required().description("id of the Deal")
                 }),
                 payload : joiDealAdd
-            },
-            response: {
-                status: {
-                    200 : joiDeal,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const deal = await dealController.update(request.params.id,request.payload)
-                return deal
+                return h.response(deal).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -365,19 +303,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 params : joiId
-            },
-            response: {
-                status: {
-                    200 : joiDeal,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const categories = await categorieController.delete()
-                return categories
+                return h.response(categories).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -391,18 +322,11 @@ const routes =[
             description: 'Get all Categories',
             notes: 'Returns array of Categories',
             tags: ['api'],
-            response: {
-                status: {
-                    200 : joiCategories,
-                    404 : notFound,
-                    400 : errorMessage
-                }
-            }
         },
         handler: async (request,h) => {
             try {
                 const categories = await categorieController.findAll()
-                return categories
+                return h.response(categories).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -417,19 +341,12 @@ const routes =[
             tags: ['api'],
             validate: {
                 params : joiId
-            },
-            response: {
-                status: {
-                    200 : joiCategorie,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const categorie = await categorieController.findById(request.params.id)
-                return categorie
+                return h.response(categorie).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -445,18 +362,11 @@ const routes =[
             validate : {
                 payload : joiCategorieAdd
             },
-            response: {
-                status: {
-                    200 : joiCategorie,
-                    404 : notFound,
-                    400 : errorMessage
-                }
-            }
         },
         handler: async (request,h) => {
             try {
                 const categorie = await categorieController.add(request.payload)
-                return categorie
+                return h.response(categorie).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -472,19 +382,12 @@ const routes =[
             validate : {
                 params: joiId ,
                 payload : joiCategorieAdd
-            },
-            response: {
-                status: {
-                    200 : joiCategorie,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const categorie = await categorieController.update(request.params.id,request.payload)
-                return categorie
+                return h.response(categorie).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -499,19 +402,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 params : joiId
-            },
-            response: {
-                status: {
-                    200 : joiCategorie,
-                    404 : notFound,
-                    400 : errorMessage
-                }
             }
         },
         handler: async (request,h) => {
             try {
                 const categorie = await categorieController.delete(request.params.id)
-                return categorie
+                return h.response(categorie).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }

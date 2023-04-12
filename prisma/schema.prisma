@@ -13,6 +13,7 @@ datasource db {
 model Admin {
   login   String  @id
   password    String
+  token       String
 }
 
 model Categorie {
