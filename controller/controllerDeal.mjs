@@ -13,6 +13,11 @@ export const dealController = {
         return await dealDao.findByCatId(name)
     } catch(e) { return Promise.reject({message: "error"})}
     },
+    findById : async (id) => {
+        try {
+            return await dealDao.findById(id)
+        } catch(e) { return Promise.reject({message: "error"})}
+    },
     delete: async (id) =>{
         try {
             return await dealDao.delete(id)

@@ -8,14 +8,14 @@ export const categorieController = {
             return await categorieDao.findAll()
         } catch (e) {return Promise.reject({message : "error"})}
     },
-    findByName : async (name) => {
+    findById : async (id) => {
     try {
-        return await categorieDao.findByName(name)
+        return await categorieDao.findById(id)
     } catch(e) { return Promise.reject({message: "error"})}
     },
-    delete: async (login) =>{
+    delete: async (id) =>{
         try {
-            return await categorieDao.delete(login)
+            return await categorieDao.delete(id)
         } catch(e)
         { return Promise.reject({message: "error"})}
     },
@@ -25,9 +25,9 @@ export const categorieController = {
         } catch(e) {
             return Promise.reject({message: "error"})}
     },
-    update: async (name, categorie) => {
+    update: async (id, categorie) => {
         try {
-            return await categorieDao.update(name, categorie)
+            return await categorieDao.update(id, categorie)
         } catch (e) {
             return Promise.reject({message: "error"})
         }

@@ -346,15 +346,15 @@ const routes =[
     },
     {
         method : 'GET',
-        path: '/categorie/{name}',
+        path: '/categorie/{id}',
         options: {
-            description: 'Get a Categorie by is name',
+            description: 'Get a Categorie by is id',
             notes: 'Returns a Categorie',
             tags: ['api'],
         },
         handler: async (request,h) => {
             try {
-                const categorie = await categorieController.findByName(request.params.name)
+                const categorie = await categorieController.findById(request.params.id)
                 return categorie
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
@@ -383,21 +383,21 @@ const routes =[
     },
     {
         method : 'PUT',
-        path: '/categorie/{name}',
+        path: '/categorie/{id}',
         options: {
             description: 'Update Categorie',
             notes: 'Returns the updated Categorie',
             tags: ['api'],
             validate : {
                 params: Joi.object({
-                    name : Joi.string().required().description("name of the categorie")
+                    name : Joi.string().required().description("id of the categorie")
                 }),
                 payload : joiCategorie
             },
         },
         handler: async (request,h) => {
             try {
-                const categorie = await categorieController.update(request.params.name,request.payload)
+                const categorie = await categorieController.update(request.params.id,request.payload)
                 return categorie
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
@@ -406,7 +406,7 @@ const routes =[
     },
     {
         method : 'DELETE',
-        path: '/categorie',
+        path: '/categorie/{id}',
         options: {
             description: 'Delete Categorie',
             notes: 'Returns the deleted Categorie',
@@ -414,8 +414,8 @@ const routes =[
         },
         handler: async (request,h) => {
             try {
-                const categories = await categorieController.delete()
-                return categories
+                const categorie = await categorieController.delete(request.params.id)
+                return categorie
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
