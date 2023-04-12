@@ -25,6 +25,11 @@ const joiCategorie = Joi.object({
     imgId: Joi.string().required().description("id of the image of the categorie")
 })
 
+const joiCategorieAdd = Joi.object({
+    nom: Joi.string().required().description("name of the categorie"),
+    imgId: Joi.string().required().description("id of the image of the categorie")
+})
+
 const joiCategories = Joi.array().items(joiCategorie).description("A collection of Categorie")
 
 const joiDeal = Joi.object({
@@ -40,6 +45,8 @@ const joiDeal = Joi.object({
 })
 
 const joiDeals = Joi.array().items(joiDeal).description("A collection of Deal")
+
+const joiId = Joi.object({id : Joi.number().required().description("id of the object")})
 
 const joiToken = Joi.object({
     token: Joi.string().required().description("Le token associé au compte utilisateur")
@@ -351,6 +358,9 @@ const routes =[
             description: 'Get a Categorie by is id',
             notes: 'Returns a Categorie',
             tags: ['api'],
+            validate: {
+                params : joiId
+            }
         },
         handler: async (request,h) => {
             try {
@@ -369,7 +379,7 @@ const routes =[
             notes: 'Returns the added Categorie',
             tags: ['api'],
             validate : {
-                payload : joiCategorie
+                payload : joiCategorieAdd
             },
         },
         handler: async (request,h) => {
@@ -389,10 +399,8 @@ const routes =[
             notes: 'Returns the updated Categorie',
             tags: ['api'],
             validate : {
-                params: Joi.object({
-                    name : Joi.string().required().description("id of the categorie")
-                }),
-                payload : joiCategorie
+                params: joiId ,
+                payload : joiCategorieAdd
             },
         },
         handler: async (request,h) => {
@@ -411,6 +419,9 @@ const routes =[
             description: 'Delete Categorie',
             notes: 'Returns the deleted Categorie',
             tags: ['api'],
+            validate : {
+                params : joiId
+            }
         },
         handler: async (request,h) => {
             try {
