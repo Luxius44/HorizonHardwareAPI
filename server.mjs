@@ -2,13 +2,15 @@
 
 import Hapi from '@hapi/hapi'
 import Joi from 'joi'
-import Path from 'path'
 
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
 
-import {adminController} from "./controler/controler.mjs";
+import {adminController} from "./controller/controllerAdmin.mjs";
+import {categorieController} from "./controller/controllerCategorie.mjs";
+import {dealController} from "./controller/controllerDeal.mjs";
+
 
 const joiAdmin = Joi.object({
         login: Joi.string().required().description("login must be unique"),
