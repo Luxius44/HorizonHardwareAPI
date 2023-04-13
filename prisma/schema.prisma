@@ -35,3 +35,15 @@ model Deal {
   imgId   String
   urlWeb   String
 }
+
+model Article {
+  id Int @id @default(autoincrement())
+  titre String 
+  description String
+  contenu String
+  imgId String
+  imgsId  String
+  tag String
+  tags  String
+  date DateTime
+}

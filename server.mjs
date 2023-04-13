@@ -10,6 +10,8 @@ import HapiSwagger from 'hapi-swagger';
 import {adminController} from "./controller/controllerAdmin.mjs";
 import {categorieController} from "./controller/controllerCategorie.mjs";
 import {dealController} from "./controller/controllerDeal.mjs";
+import {articleController} from "./controller/controllerArticle.mjs";
+
 
 
 const joiAdmin = Joi.object({
@@ -34,6 +36,31 @@ const joiCategories = Joi.array().items(joiCategorie).description("Collection of
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
     imgId: Joi.string().required().description("id of the image of the categorie")
+})
+
+const joiArticle = Joi.object({
+    id: Joi.number().integer().required().description("id of the article, autoincrement"),
+    titre: Joi.string().required().description("name of the article"),
+    description: Joi.string().required().description("description of the article"),
+    contenu: Joi.string().required().description("content of the article"),
+    imgId: Joi.string().required().description("id of the image of the article"),
+    imgsId: Joi.string().required().description("ids of the image of the article"),
+    tag : Joi.string().required().description("id of the image of the article"),
+    tags : Joi.string().required().description("ids of the other images of the article"),
+    date : Joi.date().iso().required().description("date of the release")
+}).description('Article')
+
+const joiArticles = Joi.array().items(joiCategorie).description("Collection of Article")
+
+const joiArticleAdd = Joi.object({
+    titre: Joi.string().required().description("name of the article"),
+    description: Joi.string().required().description("description of the article"),
+    contenu: Joi.string().required().description("content of the article"),
+    imgId: Joi.string().required().description("id of the image of the article"),
+    imgsId: Joi.string().required().description("ids of the image of the article"),
+    tag : Joi.string().required().description("id of the image of the article"),
+    tags : Joi.string().required().description("ids of the other images of the article"),
+    date : Joi.date().iso().required().description("date of the release")
 })
 
 const joiDeal = Joi.object({
@@ -502,6 +529,135 @@ const routes =[
             try {
                 const categorie = await categorieController.delete(request.params.id)
                 return h.response(categorie).code(200)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    // Article :
+    {
+        method : 'GET',
+        path: '/article',
+        options: {
+            description: 'Get all Articles',
+            notes: 'Returns array of Article',
+            tags: ['api'],
+            response: {
+                status : {
+                    201 : joiArticles,
+                    400 : errorMessage
+                }
+            }
+        },
+        handler: async (request,h) => {
+            try {
+                const articles = await articleController.findAll()
+                return h.response(articles).code(200)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path: '/article/{id}',
+        options: {
+            description: 'Get a Article by is id',
+            notes: 'Returns a Article',
+            tags: ['api'],
+            validate: {
+                params : joiId
+            },
+            response: {
+                status : {
+                    201 : joiArticle,
+                    400 : errorMessage
+                }
+            }
+        },
+        handler: async (request,h) => {
+            try {
+                const article = await articleController.findById(request.params.id)
+                return h.response(article).code(200)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path: '/article',
+        options: {
+            description: 'Add Article',
+            notes: 'Returns the added Article',
+            tags: ['api'],
+            validate : {
+                payload : joiArticleAdd
+            },
+            response: {
+                status : {
+                    201 : joiCategorie,
+                    400 : errorMessage
+                }
+            }
+        },
+        handler: async (request,h) => {
+            try {
+                const article = await articleController.add(request.payload)
+                return h.response(article).code(200)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'PUT',
+        path: '/article/{id}',
+        options: {
+            description: 'Update Article',
+            notes: 'Returns the updated Article',
+            tags: ['api'],
+            validate : {
+                params: joiId ,
+                payload : joiArticleAdd
+            },
+            response: {
+                status : {
+                    201 : joiArticle,
+                    400 : errorMessage
+                }
+            }
+        },
+        handler: async (request,h) => {
+            try {
+                const article = await articleController.update(request.params.id,request.payload)
+                return h.response(article).code(200)
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    },
+    {
+        method : 'DELETE',
+        path: '/article/{id}',
+        options: {
+            description: 'Delete Article',
+            notes: 'Returns the deleted Article',
+            tags: ['api'],
+            validate : {
+                params : joiId
+            },
+            response: {
+                status : {
+                    201 : joiArticle,
+                    400 : errorMessage
+                }
+            }
+        },
+        handler: async (request,h) => {
+            try {
+                const article = await articleController.delete(request.params.id)
+                return h.response(article).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
