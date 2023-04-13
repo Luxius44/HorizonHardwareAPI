@@ -11,6 +11,7 @@ import {adminController} from "./controller/controllerAdmin.mjs";
 import {categorieController} from "./controller/controllerCategorie.mjs";
 import {dealController} from "./controller/controllerDeal.mjs";
 import {articleController} from "./controller/controllerArticle.mjs";
+import {contactController} from "./controller/controllerContact.mjs"
 
 
 
@@ -50,7 +51,19 @@ const joiArticle = Joi.object({
     date : Joi.date().iso().required().description("date of the release")
 }).description('Article')
 
-const joiArticles = Joi.array().items(joiCategorie).description("Collection of Article")
+const joiArticleUsable = Joi.object({
+    id: Joi.number().integer().required().description("id of the article, autoincrement"),
+    titre: Joi.string().required().description("name of the article"),
+    description: Joi.string().required().description("description of the article"),
+    contenu: Joi.string().required().description("content of the article"),
+    imgId: Joi.string().required().description("id of the image of the article"),
+    imgsId: Joi.array().items(Joi.string()).required().description("ids of the image of the article"),
+    tag : Joi.string().required().description("id of the image of the article"),
+    tags : Joi.string().required().description("ids of the other images of the article"),
+    date : Joi.date().iso().required().description("date of the release")
+}).description('Article')
+
+const joiArticles = Joi.array().items(joiArticle).description("Collection of Article")
 
 const joiArticleAdd = Joi.object({
     titre: Joi.string().required().description("name of the article"),
@@ -74,6 +87,7 @@ const joiDeal = Joi.object({
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })
+
 
 const joiDeals = Joi.array().items(joiDeal).description("Collection of Deal")
 
@@ -562,15 +576,15 @@ const routes =[
         method : 'GET',
         path: '/article/{id}',
         options: {
-            description: 'Get a Article by is id',
-            notes: 'Returns a Article',
+            description: 'Get a Usable Article by is id',
+            notes: 'Returns a Usable Article',
             tags: ['api'],
             validate: {
                 params : joiId
             },
             response: {
                 status : {
-                    201 : joiArticle,
+                    201 : joiArticleUsable,
                     400 : errorMessage
                 }
             }
@@ -596,7 +610,7 @@ const routes =[
             },
             response: {
                 status : {
-                    201 : joiCategorie,
+                    201 : joiArticle,
                     400 : errorMessage
                 }
             }
@@ -684,6 +698,30 @@ const routes =[
             }
         }
     },
+    // Contact :
+    {
+        method : 'PUT',
+        path : '/contact',
+        options: {
+            description: 'Send email to HardwareHorizon',
+            notes : 'Returns true or false',
+            tags : ['api'],
+            validate: {
+                payload : Joi.object({
+                    from : Joi.string().required().description('sender email'),
+                    subject : Joi.string().required().description('mail subject'),
+                    text : Joi.string().required().description("mail content")
+                })
+            }
+        },
+        handler: (request,h) => {
+            try {
+                return h.response(contactController.sendMail(request.payload))
+            } catch (e) {
+                return h.response({message: 'error'}).code(400)
+            }
+        }
+    }
 ]
 
 

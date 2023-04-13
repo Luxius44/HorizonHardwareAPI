@@ -8,7 +8,9 @@ let prisma = new PrismaClient()
 export const articleDao = {
     findAll : async () => {
         try {
-            const articles = (await prisma.article.findMany()).map(obj => new Article(obj))
+            const articles = (await prisma.article.findMany()).map(obj => {
+                return new Article(obj)
+            })
             return articles
         } catch (e) {
             return Promise.reject(e)
@@ -17,7 +19,12 @@ export const articleDao = {
     findById : async (id) => {
         try {
             const elt = await prisma.article.findUnique({where: {id: id}})
-            return elt == null ? null : new Article(elt)
+            if (elt!=null) {
+                elt.imgsId=elt.imgsId.split(':')
+            } else {
+                return null
+            }
+            return new Article(elt)
         } catch (e) {
             return Promise.reject(e)
         }
