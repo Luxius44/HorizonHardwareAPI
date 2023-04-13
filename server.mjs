@@ -24,10 +24,12 @@ const joiAdminToken = Joi.object({
 }).description('User with his token')
 
 const joiCategorie = Joi.object({
-    id: Joi.number().required().description("id of the categorie, autoincrement"),
+    id: Joi.number().integer().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
     imgId: Joi.string().required().description("id of the image of the categorie")
 }).description('Categorie')
+
+const joiCategories = Joi.array().items(joiCategorie).description("Collection of Categorie")
 
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
@@ -35,19 +37,21 @@ const joiCategorieAdd = Joi.object({
 })
 
 const joiDeal = Joi.object({
-    id: Joi.number().required().description("id of the deal, autoincrement"),
-    catId : Joi.number().required().description("id of the categorie"),
+    id: Joi.number().integer().required().description("id of the deal, autoincrement"),
+    catId : Joi.number().integer().required().description("id of the categorie"),
     nom: Joi.string().required().description("name of the deal"),
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
-    date : Joi.date().required().description("release date of the deal"),
+    date : Joi.date().iso().required().description("release date of the deal"),
     detail : Joi.string().required().description("unique information link to this deal"),
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })
+
+const joiDeals = Joi.array().items(joiDeal).description("Collection of Deal")
 
 const joiDealAdd = Joi.object({
-    catId : Joi.number().required().description("id of the categorie"),
+    catId : Joi.number().integer().required().description("id of the categorie"),
     nom: Joi.string().required().description("name of the deal"),
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
@@ -57,7 +61,7 @@ const joiDealAdd = Joi.object({
     urlWeb: Joi.string().required().description("url of the product")
 })
 
-const joiId = Joi.object({id : Joi.number().required().description("id of the object")})
+const joiId = Joi.object({id : Joi.number().integer().required().description("id of the object")})
 
 const joiToken = Joi.object({
     token: Joi.string().required().description("Le token associé au compte utilisateur")
@@ -99,6 +103,12 @@ const routes =[
                 params: Joi.object({
                     login : Joi.string().required().description('the login for the user'),
                 })
+            },
+            response: {
+                status : {
+                    200 : joiAdminToken,
+                    400 : errorMessage
+                }
             }
         },
         
@@ -123,6 +133,12 @@ const routes =[
             tags : ['api'],
             validate: {
                 payload: joiAdmin
+            },
+            response: {
+                status : {
+                    200 : joiToken,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request, h) => {
@@ -152,6 +168,12 @@ const routes =[
             tags: ['api'],
             validate: {
                 payload: joiAdmin
+            },
+            response: {
+                status : {
+                    200 : joiAdminToken,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request, h) => {
@@ -177,6 +199,12 @@ const routes =[
                         .required()
                         .description('the login for the user'),
                 })
+            },
+            response: {
+                status : {
+                    200 : joiAdminToken,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request, h) => {
@@ -202,6 +230,12 @@ const routes =[
                         .description('the login for the user'),
                 }),
                 payload: joiAdmin
+            },
+            response: {
+                status : {
+                    200 : joiAdminToken,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request, h) => {
@@ -221,6 +255,12 @@ const routes =[
             description: 'Get all the Deals',
             notes: 'Returns array of Deals',
             tags: ['api'],
+            response: {
+                status : {
+                    201 : joiDeals,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -240,6 +280,12 @@ const routes =[
             tags: ['api'],
             validate: {
                 params : Joi.object({categorieId:Joi.number().required().description("id of the categorie")}) 
+            },
+            response: {
+                status : {
+                    201 : joiDeals,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -260,6 +306,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 payload : joiDealAdd
+            },
+            response: {
+                status : {
+                    201 : joiDeal,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -283,6 +335,12 @@ const routes =[
                     id : Joi.number().required().description("id of the Deal")
                 }),
                 payload : joiDealAdd
+            },
+            response: {
+                status : {
+                    201 : joiDeal,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -303,6 +361,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 params : joiId
+            },
+            response: {
+                status : {
+                    201 : joiDeals,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -322,6 +386,12 @@ const routes =[
             description: 'Get all Categories',
             notes: 'Returns array of Categories',
             tags: ['api'],
+            response: {
+                status : {
+                    201 : joiCategories,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -341,6 +411,12 @@ const routes =[
             tags: ['api'],
             validate: {
                 params : joiId
+            },
+            response: {
+                status : {
+                    201 : joiCategorie,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -362,6 +438,12 @@ const routes =[
             validate : {
                 payload : joiCategorieAdd
             },
+            response: {
+                status : {
+                    201 : joiCategorie,
+                    400 : errorMessage
+                }
+            }
         },
         handler: async (request,h) => {
             try {
@@ -382,6 +464,12 @@ const routes =[
             validate : {
                 params: joiId ,
                 payload : joiCategorieAdd
+            },
+            response: {
+                status : {
+                    201 : joiCategorie,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
@@ -402,6 +490,12 @@ const routes =[
             tags: ['api'],
             validate : {
                 params : joiId
+            },
+            response: {
+                status : {
+                    201 : joiCategorie,
+                    400 : errorMessage
+                }
             }
         },
         handler: async (request,h) => {
