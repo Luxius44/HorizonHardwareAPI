@@ -23,8 +23,10 @@ const joiAdmin = Joi.object({
 const joiAdminToken = Joi.object({
     login: Joi.string().required().description("login must be unique"),
     password: Joi.string().required().description("must an non-empty "),
-    token: Joi.string().required().description("User token")
-}).description('User with his token')
+    token: Joi.string().required().description("Admin token")
+}).description('Admin with his token')
+
+const joiAdminsToken = Joi.array().items(joiAdminToken).description("Admins with their token")
 
 const joiCategorie = Joi.object({
     id: Joi.number().integer().required().description("id of the categorie, autoincrement"),
@@ -58,8 +60,8 @@ const joiArticleUsable = Joi.object({
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
     imgsId: Joi.array().items(Joi.string()).required().description("ids of the image of the article"),
-    tag : Joi.string().required().description("id of the image of the article"),
-    tags : Joi.string().required().description("ids of the other images of the article"),
+    tag : Joi.string().required().description("principal tag the article"),
+    tags : Joi.array().items(Joi.string()).required().description("tags of the article"),
     date : Joi.date().iso().required().description("date of the release")
 }).description('Article')
 
@@ -88,7 +90,6 @@ const joiDeal = Joi.object({
     urlWeb: Joi.string().required().description("url of the product")
 })
 
-
 const joiDeals = Joi.array().items(joiDeal).description("Collection of Deal")
 
 const joiDealAdd = Joi.object({
@@ -105,7 +106,11 @@ const joiDealAdd = Joi.object({
 const joiId = Joi.object({id : Joi.number().integer().required().description("id of the object")})
 
 const joiToken = Joi.object({
-    token: Joi.string().required().description("Le token associé au compte utilisateur")
+    token: Joi.string().required().description("valid token")
+})
+
+const tokenNotFound = Joi.object({
+    message: "token not found"
 })
 
 const notFound = Joi.object({
@@ -135,33 +140,32 @@ const routes =[
     // Admin :
     {
         method: 'GET',
-        path: '/admin/{login}',
+        path: '/admin',
         options: {
-            description: 'Get Admin',
-            notes: 'Returns a user or un an error message',
+            description: 'Get All Admins',
+            notes: 'Returns all Admins or an error message',
             tags: ['api'],
             validate: {
-                params: Joi.object({
-                    login : Joi.string().required().description('the login for the user'),
-                })
+               headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
-                    200 : joiAdminToken,
-                    400 : errorMessage
+                    201 : joiAdminsToken,
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         
         handler: async (request, h) => {
             try {
-                const user = await adminController.findByLogin(request.params.login)
-               if (user == null)
-                    return h.response({message: 'not found'}).code(404)
-                else
-                    return h.response(user).code(200)
+                const admins = await adminController.findAll(request.headers.token)
+                return h.response(admins).code(200)
             } catch (e) {
-                return h.response({message: 'not found'}).code(404)
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
+                return h.response({message:"error"}).code(400)
             }
         }
     },
@@ -169,8 +173,8 @@ const routes =[
         method: 'PUT',
         path: '/admin/login',
         options : {
-            description : 'Permet de se connecter à un compte existant',
-            notes : 'Permet de se connecter à un compte existant',
+            description : 'login to an account and send back a token',
+            notes : 'login to an existent account',
             tags : ['api'],
             validate: {
                 payload: joiAdmin
@@ -178,14 +182,14 @@ const routes =[
             response: {
                 status : {
                     200 : joiToken,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : notFound
                 }
             }
         },
         handler: async (request, h) => {
             try {
                 const admin = request.payload
-
                 const token = await adminController.login(admin)
                 
                 if (token != null && !token.message) {
@@ -204,26 +208,32 @@ const routes =[
         method: 'POST',
         path: '/admin/add',
         options: {
-            description: 'Add User',
-            notes: 'Returns added user',
+            description: 'Add Admin',
+            notes: 'Returns added Admin',
             tags: ['api'],
             validate: {
+                headers: joiToken.options({ allowUnknown: true }),
                 payload: joiAdmin
             },
             response: {
                 status : {
                     200 : joiAdminToken,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request, h) => {
             try {
                 const adminToAdd = request.payload
-                const admin = await adminController.add(adminToAdd)
+                const token = request.headers.token
+                const admin = await adminController.add(adminToAdd,token)
                 return h.response(admin).code(201)
             } catch (e) {
-                return h.response({message: 'error'}).code(400)
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
+                return h.response({message:"error"}).code(400)
             }
         }
     },
@@ -231,29 +241,31 @@ const routes =[
         method: 'DELETE',
         path: '/admin/delete/{login}',
         options: {
-            description: 'Delete User',
-            notes: 'Returns the deleted user or un an error message',
+            description: 'Delete Admin',
+            notes: 'Returns the deleted admin or un an error message',
             tags: ['api'],
             validate: {
-                params: Joi.object({
-                    login : Joi.string()
-                        .required()
-                        .description('the login for the user'),
-                })
+                params: Joi.object({login : Joi.string().required().description('the login for the Admin'),}),
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
-                    200 : joiAdminToken,
-                    400 : errorMessage
+                    201 : joiAdminToken,
+                    400 : errorMessage,
+                    404 : tokenNotFound,
+                    405 : notFound
                 }
             }
         },
         handler: async (request, h) => {
             try {
-                const user = await adminController.deleteByLogin(request.params.login)
-                return h.response(user).code(200)
+                const admin = await adminController.deleteByLogin(request.params.login,request.headers.token)
+                return h.response(admin).code(200)
             } catch (e) {
-                return h.response({message: 'not found'}).code(404)
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
+                return h.response({message: 'not found'}).code(405)
             }
         }
         },
@@ -261,29 +273,30 @@ const routes =[
         method: 'PUT',
         path: '/admin/update/{login}',
         options: {
-            description: 'Update User',
-            notes: 'Returns a user or un an error message',
+            description: 'Update Admin',
+            notes: 'Returns a admin or un an error message',
             tags: ['api'],
             validate: {
-                params: Joi.object({
-                    login : Joi.string()
-                        .required()
-                        .description('the login for the user'),
-                }),
+                params: Joi.object({login : Joi.string().required().description('the login for the admin'),}),
+                headers: joiToken.options({ allowUnknown: true }),
                 payload: joiAdmin
             },
             response: {
                 status : {
-                    200 : joiAdminToken,
-                    400 : errorMessage
+                    201 : joiAdminToken,
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request, h) => {
             try {
-                const user = await adminController.update(request.params.login, request.payload)
-                return h.response(user).code(200)
+                const admin = await adminController.update(request.params.login, request.payload,request.headers.token)
+                return h.response(admin).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -412,7 +425,7 @@ const routes =[
         },
         handler: async (request,h) => {
             try {
-                const categories = await categorieController.delete()
+                const categories = await categorieController.delete(request.params.id)
                 return h.response(categories).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
