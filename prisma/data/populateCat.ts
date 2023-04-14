@@ -57,7 +57,7 @@ async function main() {
             nom:"Périphériques",
             imgId:"background"
         },
-    }),
+    })
     await prisma.categorie.create({
         data: {
             nom:"Ecran",
