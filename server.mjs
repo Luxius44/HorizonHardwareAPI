@@ -72,9 +72,9 @@ const joiArticleAdd = Joi.object({
     description: Joi.string().required().description("description of the article"),
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
-    imgsId: Joi.string().required().description("ids of the image of the article"),
+    imgsId: Joi.string().required().allow(null, '').description("ids of the image of the article"),
     tag : Joi.string().required().description("id of the image of the article"),
-    tags : Joi.string().required().description("ids of the other images of the article"),
+    tags : Joi.string().required().allow(null, '').description("ids of the other images of the article"),
     date : Joi.date().iso().required().description("date of the release")
 })
 
