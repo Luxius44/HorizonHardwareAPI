@@ -140,7 +140,7 @@ const routes =[
     // Admin :
     {
         method: 'GET',
-        path: '/admin',
+        path: '/admins',
         options: {
             description: 'Get All Admins',
             notes: 'Returns all Admins or an error message',
@@ -171,7 +171,7 @@ const routes =[
     },
     {
         method: 'PUT',
-        path: '/admin/login',
+        path: '/admins/login',
         options : {
             description : 'login to an account and send back a token',
             notes : 'login to an existent account',
@@ -206,7 +206,7 @@ const routes =[
     },
     {
         method: 'POST',
-        path: '/admin/add',
+        path: '/admins/add',
         options: {
             description: 'Add Admin',
             notes: 'Returns added Admin',
@@ -239,7 +239,7 @@ const routes =[
     },
     {
         method: 'DELETE',
-        path: '/admin/delete/{login}',
+        path: '/admins/delete/{login}',
         options: {
             description: 'Delete Admin',
             notes: 'Returns the deleted admin or un an error message',
@@ -271,7 +271,7 @@ const routes =[
         },
     {
         method: 'PUT',
-        path: '/admin/update/{login}',
+        path: '/admins/update/{login}',
         options: {
             description: 'Update Admin',
             notes: 'Returns a admin or un an error message',
