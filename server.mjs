@@ -288,10 +288,10 @@ const routes =[
             }
         }
     },
-    // Deal :
+    // Deals :
     {
         method : 'GET',
-        path: '/deal',
+        path: '/deals',
         options: {
             description: 'Get all the Deals',
             notes: 'Returns array of Deals',
@@ -314,7 +314,7 @@ const routes =[
     },
     {
         method : 'GET',
-        path: '/deal/{categorieId}',
+        path: '/deals/{categorieId}',
         options: {
             description: 'Get the deals associate to the categorieId',
             notes: 'Returns a Deals',
@@ -340,7 +340,7 @@ const routes =[
     },
     {
         method : 'POST',
-        path: '/deal',
+        path: '/deals',
         options: {
             description: 'Add Deal',
             notes: 'Returns the added Deal',
@@ -366,7 +366,7 @@ const routes =[
     },
     {
         method : 'PUT',
-        path: '/deal/{id}',
+        path: '/deals/{id}',
         options: {
             description: 'Update Deal',
             notes: 'Returns the updated Deal',
@@ -395,7 +395,7 @@ const routes =[
     },
     {
         method : 'DELETE',
-        path: '/deal/{id}',
+        path: '/deals/{id}',
         options: {
             description: 'Delete the Deal',
             notes: 'Returns the deleted Deal',
@@ -422,7 +422,7 @@ const routes =[
     // Categorie :
     {
         method : 'GET',
-        path: '/categorie',
+        path: '/categories',
         options: {
             description: 'Get all Categories',
             notes: 'Returns array of Categories',
@@ -445,7 +445,7 @@ const routes =[
     },
     {
         method : 'GET',
-        path: '/categorie/{id}',
+        path: '/categories/{id}',
         options: {
             description: 'Get a Categorie by is id',
             notes: 'Returns a Categorie',
@@ -471,7 +471,7 @@ const routes =[
     },
     {
         method : 'POST',
-        path: '/categorie',
+        path: '/categories',
         options: {
             description: 'Add Categorie',
             notes: 'Returns the added Categorie',
@@ -497,7 +497,7 @@ const routes =[
     },
     {
         method : 'PUT',
-        path: '/categorie/{id}',
+        path: '/categories/{id}',
         options: {
             description: 'Update Categorie',
             notes: 'Returns the updated Categorie',
@@ -524,7 +524,7 @@ const routes =[
     },
     {
         method : 'DELETE',
-        path: '/categorie/{id}',
+        path: '/categories/{id}',
         options: {
             description: 'Delete Categorie',
             notes: 'Returns the deleted Categorie',
@@ -551,7 +551,7 @@ const routes =[
     // Article :
     {
         method : 'GET',
-        path: '/article',
+        path: '/articles',
         options: {
             description: 'Get all Articles',
             notes: 'Returns array of Article',
@@ -574,7 +574,7 @@ const routes =[
     },
     {
         method : 'GET',
-        path: '/article/{id}',
+        path: '/articles/{id}',
         options: {
             description: 'Get a Usable Article by is id',
             notes: 'Returns a Usable Article',
@@ -600,7 +600,7 @@ const routes =[
     },
     {
         method : 'POST',
-        path: '/article',
+        path: '/articles',
         options: {
             description: 'Add Article',
             notes: 'Returns the added Article',
@@ -626,7 +626,7 @@ const routes =[
     },
     {
         method : 'PUT',
-        path: '/article/{id}',
+        path: '/articles/{id}',
         options: {
             description: 'Update Article',
             notes: 'Returns the updated Article',
@@ -653,7 +653,7 @@ const routes =[
     },
     {
         method : 'DELETE',
-        path: '/article/{id}',
+        path: '/articles/{id}',
         options: {
             description: 'Delete Article',
             notes: 'Returns the deleted Article',
@@ -728,8 +728,8 @@ const routes =[
 // Configuration Hapi :
 
 const server = Hapi.server({
-    port: 3000,
-    host: 'localhost'
+    port: process.env.PORT,
+    host: process.env.HOST
 });
 
 server.route(routes);

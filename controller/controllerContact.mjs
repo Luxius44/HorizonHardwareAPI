@@ -7,14 +7,14 @@ export const contactController = {
         const transporter = nodemailer.createTransport({
            service: "gmail",
             auth: {
-                user : "yatachiihardware@gmail.com",
-                pass : "hwkpoimgiazvlddw"
+                user : process.env.USER,
+                pass : process.env.PASS
             }
         })
 
         const mailOptions = {
             from : info.from ,
-            to :"yatachiihardware@gmail.com",
+            to : process.env.USER,
             subject : info.subject ,
             html : "Auteur du message : "+info.from+"<br/>"+info.text
         }
