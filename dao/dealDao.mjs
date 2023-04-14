@@ -24,10 +24,7 @@ export const dealDao = {
     },
     findByCatId : async (id) => {
         try {
-            const deals = (await prisma.deal.findMany({where: {catId: id}})).map(obj => {
-                obj.detail=obj.detail.split('/')
-                new Deal(obj)
-            })
+            const deals = (await prisma.deal.findMany({where: {catId: id}})).map(obj => new Deal(obj))
             return deals
         } catch (e) {
             return Promise.reject(e)

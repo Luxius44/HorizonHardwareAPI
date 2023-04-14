@@ -359,20 +359,25 @@ const routes =[
             notes: 'Returns the added Deal',
             tags: ['api'],
             validate : {
-                payload : joiDealAdd
+                payload : joiDealAdd,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
                     201 : joiDeal,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const deal = await dealController.add(request.payload)
+                const deal = await dealController.add(request.payload,request.headers.token)
                 return h.response(deal).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -388,20 +393,25 @@ const routes =[
                 params: Joi.object({
                     id : Joi.number().required().description("id of the Deal")
                 }),
+                headers: joiToken.options({ allowUnknown: true }),
                 payload : joiDealAdd
             },
             response: {
                 status : {
                     201 : joiDeal,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const deal = await dealController.update(request.params.id,request.payload)
+                const deal = await dealController.update(request.params.id,request.payload,request.headers.token)
                 return h.response(deal).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -414,20 +424,25 @@ const routes =[
             notes: 'Returns the deleted Deal',
             tags: ['api'],
             validate : {
-                params : joiId
+                params : joiId,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
                     201 : joiDeals,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const categories = await categorieController.delete(request.params.id)
-                return h.response(categories).code(200)
+                const deal = await dealController.delete(request.params.id,request.headers.token)
+                return h.response(deal).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -490,7 +505,8 @@ const routes =[
             notes: 'Returns the added Categorie',
             tags: ['api'],
             validate : {
-                payload : joiCategorieAdd
+                payload : joiCategorieAdd,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
@@ -501,9 +517,12 @@ const routes =[
         },
         handler: async (request,h) => {
             try {
-                const categorie = await categorieController.add(request.payload)
+                const categorie = await categorieController.add(request.payload,request.headers.token)
                 return h.response(categorie).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -517,7 +536,8 @@ const routes =[
             tags: ['api'],
             validate : {
                 params: joiId ,
-                payload : joiCategorieAdd
+                payload : joiCategorieAdd,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
@@ -528,9 +548,12 @@ const routes =[
         },
         handler: async (request,h) => {
             try {
-                const categorie = await categorieController.update(request.params.id,request.payload)
+                const categorie = await categorieController.update(request.params.id,request.payload,request.headers.token)
                 return h.response(categorie).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -543,7 +566,8 @@ const routes =[
             notes: 'Returns the deleted Categorie',
             tags: ['api'],
             validate : {
-                params : joiId
+                params : joiId,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
@@ -554,9 +578,12 @@ const routes =[
         },
         handler: async (request,h) => {
             try {
-                const categorie = await categorieController.delete(request.params.id)
+                const categorie = await categorieController.delete(request.params.id,request.headers.token)
                 return h.response(categorie).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -729,7 +756,7 @@ const routes =[
         },
         handler: (request,h) => {
             try {
-                return h.response(contactController.sendMail(request.payload))
+                return h.response(contactController.sendMail(request.payload)).code(201)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }

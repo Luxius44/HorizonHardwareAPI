@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs";
 
 
-const PRIVATE_KEY = "XxXMinecraftXxXBlackGaming"
+const PRIVATE_KEY = process.env.PRIVATE_KEY
 
 const verifyToken = (token) => {
     if (!token) {
