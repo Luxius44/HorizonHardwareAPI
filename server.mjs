@@ -458,7 +458,8 @@ const routes =[
             response: {
                 status : {
                     201 : joiCategories,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
@@ -484,7 +485,8 @@ const routes =[
             response: {
                 status : {
                     201 : joiCategorie,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
@@ -511,7 +513,8 @@ const routes =[
             response: {
                 status : {
                     201 : joiCategorie,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
