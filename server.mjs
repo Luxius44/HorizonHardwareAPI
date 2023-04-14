@@ -459,7 +459,6 @@ const routes =[
                 status : {
                     201 : joiCategories,
                     400 : errorMessage,
-                    404 : tokenNotFound
                 }
             }
         },
@@ -486,13 +485,15 @@ const routes =[
                 status : {
                     201 : joiCategorie,
                     400 : errorMessage,
-                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
                 const categorie = await categorieController.findById(request.params.id)
+                if (categorie==null) {
+                    return h.response({message:'not found'}).code(404)
+                }
                 return h.response(categorie).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
@@ -545,7 +546,8 @@ const routes =[
             response: {
                 status : {
                     201 : joiCategorie,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
@@ -575,7 +577,8 @@ const routes =[
             response: {
                 status : {
                     201 : joiCategorie,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
@@ -635,6 +638,9 @@ const routes =[
         handler: async (request,h) => {
             try {
                 const article = await articleController.findById(request.params.id)
+                if (article==null) {
+                    return h.response({message:'not found'}).code(404)
+                }
                 return h.response(article).code(200)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
@@ -649,20 +655,25 @@ const routes =[
             notes: 'Returns the added Article',
             tags: ['api'],
             validate : {
-                payload : joiArticleAdd
+                payload : joiArticleAdd,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
                     201 : joiArticle,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const article = await articleController.add(request.payload)
+                const article = await articleController.add(request.payload,request.headers.token)
                 return h.response(article).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -676,20 +687,25 @@ const routes =[
             tags: ['api'],
             validate : {
                 params: joiId ,
-                payload : joiArticleAdd
+                payload : joiArticleAdd,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
                     201 : joiArticle,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const article = await articleController.update(request.params.id,request.payload)
+                const article = await articleController.update(request.params.id,request.payload,request.headers.token)
                 return h.response(article).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
@@ -702,20 +718,25 @@ const routes =[
             notes: 'Returns the deleted Article',
             tags: ['api'],
             validate : {
-                params : joiId
+                params : joiId,
+                headers: joiToken.options({ allowUnknown: true }),
             },
             response: {
                 status : {
                     201 : joiArticle,
-                    400 : errorMessage
+                    400 : errorMessage,
+                    404 : tokenNotFound
                 }
             }
         },
         handler: async (request,h) => {
             try {
-                const article = await articleController.delete(request.params.id)
+                const article = await articleController.delete(request.params.id,request.headers.token)
                 return h.response(article).code(200)
             } catch (e) {
+                if (e.message=='not found') {
+                    return h.response({message:"token not found"}).code(404)
+                }
                 return h.response({message: 'error'}).code(400)
             }
         }
