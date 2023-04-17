@@ -11,7 +11,7 @@ async function main() {
             prix:115.99,
             promo:85.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Intel 1D",
             urlWeb:"urlIntel1"
         },
@@ -23,7 +23,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Intel 2D",
             urlWeb:"urlIntel2"
         },
@@ -35,7 +35,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Nvidia 2D",
             urlWeb:"urlNvidia2"
         },
@@ -47,7 +47,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Intel 2D",
             urlWeb:"urlNvidia1"
         },
@@ -59,7 +59,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Carte mère 2D",
             urlWeb:"urlCartemère2"
         },
@@ -71,7 +71,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Carte mère 1D",
             urlWeb:"urlCartemère1"
         },
@@ -83,7 +83,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Carte mère 2D",
             urlWeb:"urlCartemère2"
         },
@@ -95,7 +95,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Carte mère 1D",
             urlWeb:"urlCartemère1"
         },
@@ -107,7 +107,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Ram2D",
             urlWeb:"urlRam2"
         },
@@ -119,7 +119,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Ram1D",
             urlWeb:"urlRam1"
         },
@@ -131,7 +131,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Boitier1D",
             urlWeb:"urlBoitier1"
         },
@@ -143,7 +143,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"Boitier2D",
             urlWeb:"urlBoitier2"
         },
@@ -155,7 +155,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"BarracudaD",
             urlWeb:"urlBarracuda"
         },
@@ -167,7 +167,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"SeagateD",
             urlWeb:"urlSeagate"
         },
@@ -179,7 +179,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"SeasonicD",
             urlWeb:"urlSeasonic"
         },
@@ -191,7 +191,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"BequietD",
             urlWeb:"urlBequiet"
         },
@@ -203,7 +203,7 @@ async function main() {
             prix:110.99,
             promo:50.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"SourisD",
             urlWeb:"Souris2"
         },
@@ -215,7 +215,7 @@ async function main() {
             prix:220.99,
             promo:150.99,
             date: new Date(),
-            detail: "",
+            detail: "vram:12gb;price:120€;color:black",
             imgId:"ClavierD",
             urlWeb:"Clavier1"
         },

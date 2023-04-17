@@ -17,14 +17,37 @@ export const dealDao = {
     findById : async (id) => {
         try {
             const elt = await prisma.deal.findUnique({where: {id: id}})
-            return elt == null ? null : new Deal(elt)
+            if ( elt ==null) {
+                return null 
+            }
+            const str = elt.detail;
+            const pairs = str.split(';');
+            const objDetail = {};
+
+            pairs.forEach(pair => {
+            const [key, value] = pair.split(':');
+            objDetail[key] = value;
+            });
+            elt.detail=objDetail
+            return new Deal(elt)
         } catch (e) {
             return Promise.reject(e)
         }
     },
     findByCatId : async (id) => {
         try {
-            const deals = (await prisma.deal.findMany({where: {catId: id}})).map(obj => new Deal(obj))
+            const deals = (await prisma.deal.findMany({where: {catId: id}})).map(obj =>{
+                const str = obj.detail;
+                const pairs = str.split(';');
+                const objDetail = {};
+
+                pairs.forEach(pair => {
+                const [key, value] = pair.split(':');
+                objDetail[key] = value;
+                });
+                obj.detail=objDetail
+                return new Deal(obj)
+                })
             return deals
         } catch (e) {
             return Promise.reject(e)
