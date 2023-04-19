@@ -22,7 +22,7 @@ export const panelController = {
 
     login : async(login,password) => {
         try {
-            let response=await fetch("http://localhost:3000/admins/login",{
+            let response=await fetch(process.env.URL+"/admins/login",{
                 method : "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -42,7 +42,7 @@ export const panelController = {
 
     articles : async() => {
       try {
-        let response = await fetch ("http:localhost:3000/articles")
+        let response = await fetch (process.env.URL+"/articles")
         response = await response.json();
         return response
       } catch (e) {
@@ -52,7 +52,7 @@ export const panelController = {
 
     categories : async() => {
       try {
-        let response = await fetch ("http:localhost:3000/categories")
+        let response = await fetch (process.env.URL+"/categories")
         response = await response.json();
         return response
       } catch (e) {
@@ -62,7 +62,7 @@ export const panelController = {
 
     deals : async() => {
       try {
-        let response = await fetch ("http:localhost:3000/deals")
+        let response = await fetch (process.env.URL+"/deals")
         response = await response.json();
         return response
       } catch (e) {
@@ -72,7 +72,7 @@ export const panelController = {
 
     dealsByCatId : async(id) => {
       try {
-        let response = await fetch("http:localhost:3000/deals/"+id)
+        let response = await fetch(process.env.URL+"/deals/"+id)
         response = await response.json();
         return response
       } catch (e) {
