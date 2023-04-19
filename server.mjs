@@ -5,15 +5,20 @@ import Joi from 'joi'
 
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision';
+import Handlebarss from 'handlebars'
 import HapiSwagger from 'hapi-swagger';
+import ServerSession from 'hapi-server-session';
+import jwt from "jsonwebtoken"
 
 import {adminController} from "./controller/controllerAdmin.mjs";
 import {categorieController} from "./controller/controllerCategorie.mjs";
 import {dealController} from "./controller/controllerDeal.mjs";
 import {articleController} from "./controller/controllerArticle.mjs";
 import {contactController} from "./controller/controllerContact.mjs"
+import {panelController} from "./controller/controllerPanel.mjs"
 
 
+// Shcéma Joi :
 
 const joiAdmin = Joi.object({
         login: Joi.string().required().description("login must be unique"),
@@ -50,7 +55,7 @@ const joiArticle = Joi.object({
     imgsId: Joi.string().required().description("ids of the image of the article"),
     tag : Joi.string().required().description("id of the image of the article"),
     tags : Joi.string().required().description("ids of the other images of the article"),
-    date : Joi.date().iso().required().description("date of the release")
+    date : Joi.date().required().description("date of the release")
 }).description('Article')
 
 const joiArticleUsable = Joi.object({
@@ -79,8 +84,8 @@ const joiArticleAdd = Joi.object({
 })
 
 const joiDeal = Joi.object({
-    id: Joi.number().integer().required().description("id of the deal, autoincrement"),
-    catId : Joi.number().integer().required().description("id of the categorie"),
+    id: Joi.number().required().description("id of the deal, autoincrement"),
+    catId : Joi.number().required().description("id of the categorie"),
     nom: Joi.string().required().description("name of the deal"),
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
@@ -128,6 +133,23 @@ const swaggerOptions = {
     }
 };
 
+// Fonction utile : 
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+
+const verifyToken = (token) => {
+    if (!token) {
+      return {message: "A token is required"};
+    }
+    try {
+      return jwt.verify(token, PRIVATE_KEY);
+    } catch (err) {
+      return {message: "Invalid token"};
+    }
+};
+
+// Définisions des routes de l'api et du panel admin :
+
 const routes =[
     // Any :
     {
@@ -170,7 +192,7 @@ const routes =[
         }
     },
     {
-        method: 'PUT',
+        method: 'POST',
         path: '/admins/login',
         options : {
             description : 'login to an account and send back a token',
@@ -785,7 +807,153 @@ const routes =[
                 return h.response({message: 'error'}).code(400)
             }
         }
-    }
+    },
+    // Public :
+    {
+        method: 'GET',
+        path: '/public/css',
+        handler:(request,h)=> {
+            try {
+                return h.file('view/assets/css/index.css')
+            } catch(e) {
+                return h.response({message: 'error'}).code(404)
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/public/img/logo',
+        handler:(request,h)=> {
+            try {
+                return h.file('view/assets/img/logo.png')
+            } catch(e) {
+                return h.response({message: 'error'}).code(404)
+            }
+        }
+    },
+    // Panel Admin : 
+    {
+        method : 'GET',
+        path : '/panel',
+        handler :(request,h) =>{
+            try {
+                return h.view('login')
+            } catch(e) {
+                return h.view('login')
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/login',
+        options: {
+            validate: {
+                payload: joiAdmin
+            }
+        },
+        handler: async (request,h)=>{
+            try {
+                const response=await panelController.login(request.payload.login,request.payload.password)
+                if (response.token!=null && response.token!="") {
+                    request.session.views=response.token
+                    return h.view('home')
+                }
+                return h.view('login',{message:'Login ou password incorrect !'})
+            } catch(e) {
+                return h.view('login',{message:'Login ou password incorrect !'})
+            }
+        }
+
+    },
+    {
+        method : 'GET',
+        path : '/panel/home',
+        handler :(request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('home')
+            } catch(e) {
+                return h.view('home')
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deals',
+        handler :(request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('deals')
+            } catch(e) {
+                return h.view('deals')
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/categories',
+        handler :(request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('categories')           
+            } catch(e) {
+                return h.view('categories')
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/articles',
+        handler :(request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('articles')
+            } catch(e) {
+                return h.view('articles')
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/autres',
+        handler :(request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('autres')
+            } catch(e) {
+                return h.view('autres')
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/logout',
+        handler :(request,h) =>{
+            try {
+                if (request.session.views) {
+                    request.session.views=""
+                }
+                return h.view('login')
+            } catch(e) {
+                return h.view('login')
+            }
+        }
+    },
 ]
 
 
@@ -796,7 +964,9 @@ const server = Hapi.server({
     host: process.env.HOST
 });
 
+
 server.route(routes);
+
 
 export const init = async () => {
     await server.initialize();
@@ -808,10 +978,25 @@ export  const start = async () => {
         Inert,
         Vision,
         {
-            plugin: HapiSwagger,
+            plugin: HapiSwagger, 
             options: swaggerOptions
-        }
+        },
+        {
+            plugin: ServerSession,
+            options: {
+                cookie: {
+                    isSecure: false,
+                },
+                expiresIn : 3600000
+            },
+        },
     ]);
+    server.views({
+        engines: {
+            hbs: Handlebarss
+        },
+        path: 'D:/HorizonHardwareAPI/view',
+    })     
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
     return server;
