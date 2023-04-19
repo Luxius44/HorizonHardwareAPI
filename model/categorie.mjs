@@ -3,7 +3,7 @@
 export default class Categorie {
     id
     nom
-    url
+    imgId
     constructor(obj) {
         Object.assign(this,obj)
     }

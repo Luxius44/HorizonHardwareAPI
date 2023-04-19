@@ -882,14 +882,22 @@ const routes =[
     },
     {
         method : 'GET',
-        path : '/panel/deals',
-        handler :(request,h) =>{
+        path : '/panel/deals/{id*}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler : async (request,h) =>{
             try {
                 const reponse = verifyToken(request.session.views)
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('deals')
+                if (request.params.id){
+                    return h.view('deals',{deals:await panelController.dealsByCatId(request.params.id),categories:await panelController.categories()})
+                }
+                return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})
             } catch(e) {
                 return h.view('deals')
             }
@@ -898,13 +906,13 @@ const routes =[
     {
         method : 'GET',
         path : '/panel/categories',
-        handler :(request,h) =>{
+        handler :async (request,h) =>{
             try {
                 const reponse = verifyToken(request.session.views)
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('categories')           
+                return h.view('categories',{categories:await panelController.categories()})           
             } catch(e) {
                 return h.view('categories')
             }
@@ -913,13 +921,13 @@ const routes =[
     {
         method : 'GET',
         path : '/panel/articles',
-        handler :(request,h) =>{
+        handler :async (request,h) =>{
             try {
                 const reponse = verifyToken(request.session.views)
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('articles')
+                return h.view('articles',{articles:await panelController.articles()})
             } catch(e) {
                 return h.view('articles')
             }

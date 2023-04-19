@@ -12,7 +12,7 @@ async function main() {
             promo:85.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Intel 1D",
+            imgId:"background",
             urlWeb:"urlIntel1"
         },
     })
@@ -24,7 +24,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Intel 2D",
+            imgId:"background",
             urlWeb:"urlIntel2"
         },
     })
@@ -36,7 +36,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Nvidia 2D",
+            imgId:"background",
             urlWeb:"urlNvidia2"
         },
     })
@@ -48,7 +48,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Intel 2D",
+            imgId:"background",
             urlWeb:"urlNvidia1"
         },
     })
@@ -60,7 +60,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Carte mère 2D",
+            imgId:"background",
             urlWeb:"urlCartemère2"
         },
     })
@@ -72,7 +72,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Carte mère 1D",
+            imgId:"background",
             urlWeb:"urlCartemère1"
         },
     })
@@ -84,7 +84,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Carte mère 2D",
+            imgId:"background",
             urlWeb:"urlCartemère2"
         },
     })
@@ -96,7 +96,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Carte mère 1D",
+            imgId:"background",
             urlWeb:"urlCartemère1"
         },
     })
@@ -108,7 +108,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Ram2D",
+            imgId:"background",
             urlWeb:"urlRam2"
         },
     })
@@ -120,7 +120,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Ram1D",
+            imgId:"background",
             urlWeb:"urlRam1"
         },
     })
@@ -132,7 +132,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Boitier1D",
+            imgId:"background",
             urlWeb:"urlBoitier1"
         },
     })
@@ -144,7 +144,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"Boitier2D",
+            imgId:"background",
             urlWeb:"urlBoitier2"
         },
     })
@@ -156,7 +156,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"BarracudaD",
+            imgId:"background",
             urlWeb:"urlBarracuda"
         },
     })
@@ -168,7 +168,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"SeagateD",
+            imgId:"background",
             urlWeb:"urlSeagate"
         },
     })
@@ -180,7 +180,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"SeasonicD",
+            imgId:"background",
             urlWeb:"urlSeasonic"
         },
     })
@@ -192,7 +192,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"BequietD",
+            imgId:"background",
             urlWeb:"urlBequiet"
         },
     })
@@ -204,7 +204,7 @@ async function main() {
             promo:50.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"SourisD",
+            imgId:"background",
             urlWeb:"Souris2"
         },
     })
@@ -216,7 +216,7 @@ async function main() {
             promo:150.99,
             date: new Date(),
             detail: "vram:12gb;price:120€;color:black",
-            imgId:"ClavierD",
+            imgId:"background",
             urlWeb:"Clavier1"
         },
     })

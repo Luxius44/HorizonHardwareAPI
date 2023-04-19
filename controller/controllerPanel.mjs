@@ -38,5 +38,45 @@ export const panelController = {
         } catch {
             return Promise.reject({message: "error"})
         }
+    },
+
+    articles : async() => {
+      try {
+        let response = await fetch ("http:localhost:3000/articles")
+        response = await response.json();
+        return response
+      } catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+
+    categories : async() => {
+      try {
+        let response = await fetch ("http:localhost:3000/categories")
+        response = await response.json();
+        return response
+      } catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+
+    deals : async() => {
+      try {
+        let response = await fetch ("http:localhost:3000/deals")
+        response = await response.json();
+        return response
+      } catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+
+    dealsByCatId : async(id) => {
+      try {
+        let response = await fetch("http:localhost:3000/deals/"+id)
+        response = await response.json();
+        return response
+      } catch (e) {
+        return Promise.reject({message: "error"})
+      }
     }
 }

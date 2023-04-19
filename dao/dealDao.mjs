@@ -8,7 +8,18 @@ let prisma = new PrismaClient()
 export const dealDao = {
     findAll : async () => {
         try {
-            const deals = (await prisma.deal.findMany()).map(obj => new Deal(obj))
+            const deals = (await prisma.deal.findMany()).map(obj =>{
+                const str = obj.detail;
+                const pairs = str.split(';');
+                const objDetail = {};
+
+                pairs.forEach(pair => {
+                const [key, value] = pair.split(':');
+                objDetail[key] = value;
+                });
+                obj.detail=objDetail
+                return new Deal(obj)
+                })
             return deals
         } catch (e) {
             return Promise.reject(e)

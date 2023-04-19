@@ -20,3 +20,18 @@
             <a href="/panel/autres">Autres</a>
         </div>
     </div>
+    <div class="add">
+        <p>Ajoutez une nouvelle Catégorie : <a href="">ADD Catégorie</a></p>
+    </div>
+    <div class="categories">
+        {{#each categories}}
+        <div class="categorie">
+            <img src="/img/{{this.imgId}}" alt="">
+            <p>{{this.nom}}</p>
+            <div class="balise">
+                <a href="">UPDATE</a>
+                <a href="">DELETE</a>
+            </div>
+        </div>
+            {{/each}}
+    </div>

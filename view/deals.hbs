@@ -20,3 +20,19 @@
             <a href="/panel/autres">Autres</a>
         </div>
     </div>
+    <div class="add">
+        <p>Ajoutez un nouveau Deal : <a href="">ADD Deal</a></p> <br>
+        <p>Filtrez par Catégories : {{#each categories}} <a href="/panel/deals/{{this.id}}">{{this.nom}}</a> &nbsp;<span style="color:#FBAE3B">|</span>{{/each}}</p>
+    </div>
+    <div class="categories">
+        {{#each deals}}
+        <div class="categorie">
+            <img src="/img/{{this.imgId}}" alt="">
+            <p>{{this.nom}}</p>
+            <div class="balise">
+                <a href="">UPDATE</a>
+                <a href="">DELETE</a>
+            </div>
+        </div>
+            {{/each}}
+    </div>
