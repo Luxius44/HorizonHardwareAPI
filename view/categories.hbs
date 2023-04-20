@@ -27,10 +27,10 @@
         {{#each categories}}
         <div class="categorie">
             <img src="/img/{{this.imgId}}" alt="">
-            <p>{{this.nom}}</p>
+            <p class="name">{{this.nom}}</p>
             <div class="balise">
                 <a href="">UPDATE</a>
-                <a href="">DELETE</a>
+                <a href="/panel/deleteCategories/{{this.id}}">DELETE</a>
             </div>
         </div>
             {{/each}}

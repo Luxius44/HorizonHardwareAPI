@@ -78,5 +78,53 @@ export const panelController = {
       } catch (e) {
         return Promise.reject({message: "error"})
       }
-    }
+    },
+
+    deleteDeal : async (id,token) => {
+      try {
+        let response=await fetch(process.env.URL+"/deals/"+id,{
+          method : "DELETE",
+          headers: {
+              'Accept': 'application/json',
+              'token': token,
+          },
+         })
+         response = await response.json();
+         return response
+      }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+
+    deleteCategories : async (id,token) => {
+      try {
+        let response=await fetch(process.env.URL+"/categories/"+id,{
+          method : "DELETE",
+          headers: {
+              'Accept': 'application/json',
+              'token': token,
+          },
+         })
+         response = await response.json();
+         return response
+      }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+
+    deleteArticles : async (id,token) => {
+      try {
+        let response=await fetch(process.env.URL+"/articles/"+id,{
+          method : "DELETE",
+          headers: {
+              'Accept': 'application/json',
+              'token': token,
+          },
+         })
+         response = await response.json();
+         return response
+      }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
 }

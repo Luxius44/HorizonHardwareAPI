@@ -860,7 +860,7 @@ const routes =[
                 }
                 return h.view('login',{message:'Login ou password incorrect !'})
             } catch(e) {
-                return h.view('login',{message:'Login ou password incorrect !'})
+                return h.view('login',{message:'Une erreur c`est produite !'})
             }
         }
 
@@ -876,7 +876,7 @@ const routes =[
                 }
                 return h.view('home')
             } catch(e) {
-                return h.view('home')
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },
@@ -899,7 +899,29 @@ const routes =[
                 }
                 return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})
             } catch(e) {
-                return h.view('deals')
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteDeal/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const response =await panelController.deleteDeal(request.params.id,request.session.views)
+                console.log(response)
+                return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },
@@ -914,7 +936,29 @@ const routes =[
                 }
                 return h.view('categories',{categories:await panelController.categories()})           
             } catch(e) {
-                return h.view('categories')
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteCategories/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const response =await panelController.deleteCategories(request.params.id,request.session.views)
+                console.log(response)
+                return h.view('categories',{categories:await panelController.categories()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },
@@ -929,7 +973,29 @@ const routes =[
                 }
                 return h.view('articles',{articles:await panelController.articles()})
             } catch(e) {
-                return h.view('articles')
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteArticles/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const response =await panelController.deleteArticles(request.params.id,request.session.views)
+                console.log(response)
+                return h.view('articles',{articles:await panelController.articles()})
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },
@@ -944,7 +1010,7 @@ const routes =[
                 }
                 return h.view('autres')
             } catch(e) {
-                return h.view('autres')
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },
@@ -958,7 +1024,7 @@ const routes =[
                 }
                 return h.view('login')
             } catch(e) {
-                return h.view('login')
+                return h.view('home',{message:'Une erreur c`est produite !'})
             }
         }
     },

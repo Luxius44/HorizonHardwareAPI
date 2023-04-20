@@ -8,8 +8,8 @@ export default class Deal {
     promo
     date
     detail
-    url_img
-    url_web
+    imgId
+    urlWeb
     constructor(obj) {
         Object.assign(this,obj)
     }

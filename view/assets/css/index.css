@@ -309,13 +309,17 @@ a:hover {
 }
 
 .balise {
-  width: 100%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: flex-end;
   justify-content: center;
   margin-right: 20px;
+}
+
+.name {
+  width: 60%;
 }
 
 /* Catégorie */
@@ -339,4 +343,12 @@ a:hover {
 .categorie img{
   width: 180px;
   margin-right: 10px;
+}
+
+/* Deal */
+
+.detail {
+  width: 50%;
+  margin: auto 0px auto 30px;
+  font-size: small;
 }
