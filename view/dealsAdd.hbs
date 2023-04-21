@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/css" rel="stylesheet">
+    <title>Hardware Horizon | Deals</title>
+
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="/panel/home"><img src="/public/img/logo" alt=""></a>
+        </div>
+        <div class="lien">
+            <a href="/panel/deals">Deals</a>
+            <a href="/panel/categories">Catégories</a>
+            <a href="/panel/articles">Articles</a>
+            <a href="/panel/autres">Autres</a>
+        </div>
+    </div>
+
+    <form class="addDeal" action="/panel/addDeal" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="catId">Catégorie :</label>
+            <input type="text" id="catId" name="catId" list="categorie">
+            <datalist id="categorie">
+                {{#each categories}}
+                    <option value="{{this.id}}:{{this.nom}}">
+                {{/each}}
+            </datalist>
+        </div>
+
+        <div>
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom">
+        </div>
+
+        <div>
+            <label for="prix">Prix :</label>
+            <input type="number" id="prix" name="prix" step="0.01">
+        </div>
+
+        <div>
+            <label for="promo">Prix promotionnel :</label>
+            <input type="number" id="promo" name="promo" step="0.01">
+        </div>
+            <label for="image">Image :</label>
+            <input type="file" id="image" name="image" accept="image/jpeg" onchange="previewImage()">
+            <img id="image-preview" src="#" alt="Image preview">
+        </div>
+
+        <div>
+            <label for="urlweb">URL :</label>
+            <input type="text" id="urlweb" name="urlweb">
+        </div>
+
+        <button type="submit" value="Add Deal">Add Deal</button>
+        <a href="/panel/deals">Cancel ?</a>
+        {{message}}
+    </form>
+</body>
+</html>
+
+
+<script>
+    function previewImage() {
+    var preview = document.querySelector('#image-preview');
+    var file = document.querySelector('#image').files[0];
+    var reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+        preview.src = reader.result;
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+</script>
