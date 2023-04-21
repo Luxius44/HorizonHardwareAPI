@@ -345,6 +345,19 @@ a:hover {
   margin-right: 10px;
 }
 
+.addCategorie {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.addCategorie img {
+  width: 20%;
+  height: 20%;
+}
+
 /* Deal */
 
 .detail {
@@ -352,3 +365,17 @@ a:hover {
   margin: auto 0px auto 30px;
   font-size: small;
 }
+
+.addDeal {
+  margin-top: 30px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 20px;
+}
+
+.addDeal img {
+width: 20%;
+height: 20%;
+}
+

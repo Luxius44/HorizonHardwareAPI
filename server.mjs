@@ -102,7 +102,7 @@ const joiDealAdd = Joi.object({
     nom: Joi.string().required().description("name of the deal"),
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
-    date : Joi.date().required().description("release date of the deal"),
+    date : Joi.date().iso().required().description("release date of the deal"),
     detail : Joi.string().required().description("unique information link to this deal"),
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
@@ -905,6 +905,57 @@ const routes =[
     },
     {
         method : 'GET',
+        path : '/panel/addDeal',
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('dealsAdd',{categories:await panelController.categories()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/addDeal',
+        options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
+            validate : {
+                payload : Joi.object({
+                    catId: Joi.string().required(),
+                    nom: Joi.string().required(),
+                    prix: Joi.string().required(),
+                    promo: Joi.string().required(),
+                    urlweb: Joi.string().required(),
+                  }).options({ allowUnknown: true }),
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                if (!request.payload.image) {
+                    return h.view('dealsAdd',{categories:await panelController.categories(),message:"Tu as oublier de mettre une image"})           
+                }
+                await panelController.addDeal(request.payload,request.session.views)
+                return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
         path : '/panel/deleteDeal/{id}',
         options: {
             validate : {
@@ -918,7 +969,6 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteDeal(request.params.id,request.session.views)
-                console.log(response)
                 return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -942,6 +992,53 @@ const routes =[
     },
     {
         method : 'GET',
+        path : '/panel/addCategorie',
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('categoriesAdd')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/addCategorie',
+        options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
+            validate : {
+                payload : Joi.object({
+                    nom: Joi.string().required(),
+                  }).options({ allowUnknown: true }),
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                if (!request.payload.image) {
+                    return h.view('categoriesAdd',{message:"Tu as oublier de mettre une image"})           
+                }
+                await panelController.addCategorie(request.payload,request.session.views)
+                return h.view('categories',{categories:await panelController.categories()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
         path : '/panel/deleteCategories/{id}',
         options: {
             validate : {
@@ -955,7 +1052,6 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteCategories(request.params.id,request.session.views)
-                console.log(response)
                 return h.view('categories',{categories:await panelController.categories()})           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -992,7 +1088,6 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteArticles(request.params.id,request.session.views)
-                console.log(response)
                 return h.view('articles',{articles:await panelController.articles()})
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1069,7 +1164,7 @@ export  const start = async () => {
         engines: {
             hbs: Handlebarss
         },
-        path: 'D:/HorizonHardwareAPI/view',
+        path: 'E:/HorizonHardwareAPI/view',
     })     
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);

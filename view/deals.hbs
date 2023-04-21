@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="add">
-        <p>Ajoutez un nouveau Deal : <a href="">ADD Deal</a></p> <br>
+        <p>Ajoutez un nouveau Deal : <a href="/panel/addDeal">ADD Deal</a></p> <br>
         <p>Filtrez par Catégories :<span style="color:#FBAE3B">|</span> {{#each categories}} <a href="/panel/deals/{{this.id}}">{{this.nom}}</a> &nbsp;<span style="color:#FBAE3B">|</span>{{/each}}</p>
     </div>
     <div class="categories">
@@ -32,7 +32,7 @@
             <div class="detail">
                 <p>Prix:{{this.prix}}</p>
                 <p>Promo:{{this.promo}}</p>
-                <p>{{this.urlWeb}}</p>
+                <a href="{{this.urlWeb}}">Lien</a>
             </div>
             <div class="balise">
                 <a href="">UPDATE</a>
