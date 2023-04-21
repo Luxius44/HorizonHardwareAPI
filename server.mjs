@@ -1164,7 +1164,7 @@ export  const start = async () => {
         engines: {
             hbs: Handlebarss
         },
-        path: 'E:/HorizonHardwareAPI/view',
+        path: process.env.PATH2,
     })     
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
