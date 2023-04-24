@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/public/css" rel="stylesheet">
-    <title>Hardware Horizon | Catégories</title>
+    <title>Hardware Horizon | Categories</title>
 
 </head>
 <body>
@@ -20,18 +20,18 @@
             <a href="/panel/autres">Autres</a>
         </div>
     </div>
-    <div class="add">
-        <p>Ajoutez une nouvelle Catégorie : <a href="/panel/addCategorie">ADD Catégorie</a></p>
-    </div>
-    <div class="categories">
-        {{#each categories}}
-        <div class="categorie">
-            <img src="/img/{{this.imgId}}" alt="">
-            <p class="name">{{this.nom}}</p>
-            <div class="balise">
-                <a href="/panel/updateCategorie/{{this.id}}">UPDATE</a>
-                <a href="/panel/deleteCategories/{{this.id}}">DELETE</a>
-            </div>
+
+    <form class="addDeal" action="/panel/updateCategorie/{{categorie.id}}" method="POST">
+        <article> Modification Categorie {{categorie.nom}}:</article>
+        <div>
+            <label for="nom">Nom :</label>
+            <input required type="text" id="nom" name="nom" value="{{categorie.nom}}">
         </div>
-            {{/each}}
-    </div>
+        <input style="display: none;" required type="text" name="imgId" value="{{categorie.imgId}}">
+
+        <button type="submit" value="Add Deal">Update Categorie</button>
+        <a href="/panel/categories">Cancel ?</a>
+        {{message}}
+    </form>
+</body>
+</html>

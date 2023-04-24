@@ -177,6 +177,26 @@ export const panelController = {
         return Promise.reject({message: "error"})
       }
     },
+    updateCategorie : async (payload,id,token) => {
+      try {
+        let response = await fetch(process.env.URL+"/categories/"+id,{
+          method : "PUT",
+          headers: {
+            'Accept': 'application/json',
+            'token': token,
+            'Content-Type': 'application/json',
+          },
+          body : JSON.stringify({
+            nom: payload.nom,
+            imgId:payload.imgId,
+        }),
+        })
+        response = await response.json();
+        return response
+      } catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
     deleteCategories : async (id,token) => {
       try {
         let response=await fetch(process.env.URL+"/categories/"+id,{

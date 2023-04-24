@@ -1097,6 +1097,51 @@ const routes =[
     },
     {
         method : 'GET',
+        path : '/panel/updateCategorie/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('categoriesUpdate',{categorie: await categorieController.findById(request.params.id)  })           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/updateCategorie/{id}',
+        options : {
+            validate : {
+                params : Joi.object({id: Joi.number().integer()}),
+                payload : Joi.object({
+                    nom: Joi.string().required(),
+                    imgId: Joi.string().required(),
+                  })
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                await panelController.updateCategorie(request.payload,request.params.id,request.session.views)
+                return h.redirect('/panel/categories')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
         path : '/panel/deleteCategories/{id}',
         options: {
             validate : {
