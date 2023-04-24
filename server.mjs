@@ -967,6 +967,53 @@ const routes =[
     },
     {
         method : 'GET',
+        path : '/panel/updateDeal/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('dealsUpdate',{categories:await panelController.categories(),deal:await panelController.dealsFindById(request.params.id)})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/updateDeal/{id}',
+        options : {
+            validate : {
+                params : Joi.object({id: Joi.number().integer()}),
+                payload : Joi.object({
+                    nom: Joi.string().required(),
+                    prix: Joi.string().required(),
+                    promo: Joi.string().required(),
+                    urlweb: Joi.string().required(),
+                  })
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                await panelController.updateDeal(request.payload,request.params.id,request.session.views)
+                return h.redirect('/panel/deals')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
         path : '/panel/deleteDeal/{id}',
         options: {
             validate : {

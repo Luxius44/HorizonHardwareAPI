@@ -387,3 +387,9 @@ height: 20%;
   text-overflow: ellipsis;
 }
 
+article{
+  font-size: 25px;
+  color: #FBAE3B;
+  margin-bottom: 20px;
+}
+

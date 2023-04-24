@@ -21,10 +21,12 @@
         </div>
     </div>
 
+
     <form class="addDeal" action="/panel/addDeal" method="POST" enctype="multipart/form-data">
+        <article>Ajout Deal :</article>
         <div>
             <label for="catId">Catégorie :</label>
-            <input type="text" id="catId" name="catId" list="categorie">
+            <input required type="text" id="catId" name="catId" list="categorie">
             <datalist id="categorie">
                 {{#each categories}}
                     <option value="{{this.id}}:{{this.nom}}">
@@ -34,26 +36,26 @@
 
         <div>
             <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom">
+            <input required type="text" id="nom" name="nom">
         </div>
 
         <div>
             <label for="prix">Prix :</label>
-            <input type="number" id="prix" name="prix" step="0.01">
+            <input required type="number" id="prix" name="prix" step="0.01">
         </div>
 
         <div>
             <label for="promo">Prix promotionnel :</label>
-            <input type="number" id="promo" name="promo" step="0.01">
+            <input required type="number" id="promo" name="promo" step="0.01">
         </div>
             <label for="image">Image :</label>
-            <input type="file" id="image" name="image" accept="image/png ,image/jpeg" onchange="previewImage()">
+            <input required type="file" id="image" name="image" accept="image/png ,image/jpeg" onchange="previewImage()">
             <img id="image-preview" src="#" alt="Image preview">
         </div>
 
         <div>
             <label for="urlweb">URL :</label>
-            <input type="text" id="urlweb" name="urlweb">
+            <input required type="text" id="urlweb" name="urlweb">
         </div>
 
         <button type="submit" value="Add Deal">Add Deal</button>

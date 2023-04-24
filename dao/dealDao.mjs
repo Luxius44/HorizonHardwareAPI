@@ -31,15 +31,6 @@ export const dealDao = {
             if ( elt ==null) {
                 return null 
             }
-            const str = elt.detail;
-            const pairs = str.split(';');
-            const objDetail = {};
-
-            pairs.forEach(pair => {
-            const [key, value] = pair.split(':');
-            objDetail[key] = value;
-            });
-            elt.detail=objDetail
             return new Deal(elt)
         } catch (e) {
             return Promise.reject(e)

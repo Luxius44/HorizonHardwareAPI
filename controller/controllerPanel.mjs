@@ -3,6 +3,8 @@
 import fetch from "node-fetch";
 import Fs from "fs"
 
+import {dealDao} from "../dao/dealDao.mjs";
+
 import jwt from "jsonwebtoken"
 
 export const panelController = {
@@ -56,7 +58,13 @@ export const panelController = {
         return Promise.reject({message: "error"})
       }
     },
-
+    dealsFindById : async (id) => {
+      try {
+          return await dealDao.findById(id)
+      } catch(e) {
+        return Promise.reject({message: "error"})
+      }
+    },
     dealsByCatId : async(id) => {
       try {
         let response = await fetch(process.env.URL+"/deals/"+id)
@@ -93,6 +101,33 @@ export const panelController = {
          response = await response.json();
          return response
       }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+    updateDeal : async (payload,id,token) => {
+      try {
+        const deal = await dealDao.findById(id)
+        let response = await fetch(process.env.URL+"/deals/"+id,{
+          method : "PUT",
+          headers: {
+            'Accept': 'application/json',
+            'token': token,
+            'Content-Type': 'application/json',
+          },
+          body : JSON.stringify({
+            catId:Number(deal.catId),
+            nom: payload.nom,
+            prix:Number(payload.prix),
+            promo:Number(payload.promo),
+            date:new Date().toISOString(),
+            detail:"string",
+            imgId:deal.imgId,
+            urlWeb:payload.urlweb,
+        }),
+        })
+        response = await response.json();
+        return response
+      } catch (e) {
         return Promise.reject({message: "error"})
       }
     },
