@@ -5,20 +5,6 @@ import Fs from "fs"
 
 import jwt from "jsonwebtoken"
 
-
-const PRIVATE_KEY = process.env.PRIVATE_KEY
-
-const verifyToken = (token) => {
-    if (!token) {
-      return {message: "A token is required"};
-    }
-    try {
-      return jwt.verify(token, PRIVATE_KEY);
-    } catch (err) {
-      return {message: "Invalid token"};
-    }
-};
-
 export const panelController = {
 
     login : async(login,password) => {
@@ -83,8 +69,8 @@ export const panelController = {
     addDeal : async (payload,token) => {
       try {
         const img = payload.nom+Math.floor(Math.random()*(1000))
-        const fileStream = Fs.createWriteStream("img/"+img+".jpg");
         const readStream = Fs.createReadStream(payload.image.path);
+        const fileStream = Fs.createWriteStream("img/"+img);
         await  readStream.pipe(fileStream);
         let response=await fetch(process.env.URL+"/deals",{
           method : "POST",
@@ -121,7 +107,7 @@ export const panelController = {
          })
          response = await response.json();
          if (response.imgId) {
-          Fs.unlink("img/"+response.imgId+".jpg", (err) => {
+          Fs.unlink("img/"+response.imgId, (err) => {
             if (err) {
               return;
             }
@@ -135,7 +121,7 @@ export const panelController = {
     addCategorie : async (payload,token) => {
       try {
         const img = payload.nom+Math.floor(Math.random()*(1000))
-        const fileStream = Fs.createWriteStream("img/"+img+".jpg");
+        const fileStream = Fs.createWriteStream("img/"+img);
         const readStream = Fs.createReadStream(payload.image.path);
         await  readStream.pipe(fileStream);
         let response=await fetch(process.env.URL+"/categories",{
@@ -167,7 +153,7 @@ export const panelController = {
          })
          response = await response.json();
          if (response.imgId) {
-          Fs.unlink("img/"+response.imgId+".jpg", (err) => {
+          Fs.unlink("img/"+response.imgId, (err) => {
             if (err) {
               return;
             }

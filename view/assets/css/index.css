@@ -306,6 +306,7 @@ a:hover {
 .article img{
   width: 180px;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .balise {
@@ -343,6 +344,7 @@ a:hover {
 .categorie img{
   width: 180px;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .addCategorie {
@@ -361,7 +363,7 @@ a:hover {
 /* Deal */
 
 .detail {
-  width: 50%;
+  width: 25%;
   margin: auto 0px auto 30px;
   font-size: small;
 }
@@ -377,5 +379,11 @@ a:hover {
 .addDeal img {
 width: 20%;
 height: 20%;
+}
+
+.detail a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 

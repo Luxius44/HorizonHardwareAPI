@@ -2,11 +2,11 @@
 
 import Hapi from '@hapi/hapi'
 import Joi from 'joi'
-
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision';
 import Handlebarss from 'handlebars'
 import HapiSwagger from 'hapi-swagger';
+
 import ServerSession from 'hapi-server-session';
 import jwt from "jsonwebtoken"
 
@@ -768,17 +768,17 @@ const routes =[
         method : 'GET',
         path: '/img/{filename}',
         options: {
-            description: 'Get an Image by is id',
+            description: 'Get an Image by is filename',
             notes: 'Returns an Image or an error if the id doesnt exist',
             tags: ['api'],
             validate: {
-                params : Joi.object({filename:Joi.string().required().description("filename without the extension")})
+                params : Joi.object({filename:Joi.string().required().description("filename")})
             },
         },
         handler: (request,h) => {
             try {
                 const filename = request.params.filename
-                return h.file(`img/${filename}.jpg`)
+                return h.file(`img/${filename}`)
             } catch (e) {
                 return h.response({message: 'error'}).code(400)
             }
@@ -856,7 +856,7 @@ const routes =[
                 const response=await panelController.login(request.payload.login,request.payload.password)
                 if (response.token!=null && response.token!="") {
                     request.session.views=response.token
-                    return h.view('home')
+                    return h.redirect('/panel/home')
                 }
                 return h.view('login',{message:'Login ou password incorrect !'})
             } catch(e) {
@@ -948,7 +948,7 @@ const routes =[
                     return h.view('dealsAdd',{categories:await panelController.categories(),message:"Tu as oublier de mettre une image"})           
                 }
                 await panelController.addDeal(request.payload,request.session.views)
-                return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})           
+                return h.redirect('/panel/deals')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
@@ -969,7 +969,7 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteDeal(request.params.id,request.session.views)
-                return h.view('deals',{deals:await panelController.deals(),categories:await panelController.categories()})           
+                return h.redirect('/panel/deals')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
@@ -1031,7 +1031,7 @@ const routes =[
                     return h.view('categoriesAdd',{message:"Tu as oublier de mettre une image"})           
                 }
                 await panelController.addCategorie(request.payload,request.session.views)
-                return h.view('categories',{categories:await panelController.categories()})           
+                return h.redirect('/panel/categories')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
@@ -1052,7 +1052,7 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteCategories(request.params.id,request.session.views)
-                return h.view('categories',{categories:await panelController.categories()})           
+                return h.redirect('/panel/categories')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
@@ -1088,7 +1088,7 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 const response =await panelController.deleteArticles(request.params.id,request.session.views)
-                return h.view('articles',{articles:await panelController.articles()})
+                return h.redirect('/panel/articles')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
