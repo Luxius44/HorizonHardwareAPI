@@ -839,7 +839,18 @@ const routes =[
             try {
                 return h.view('login')
             } catch(e) {
-                return h.view('login')
+                return h.view('login',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/{any*}',
+        handler :(request,h) =>{
+            try {
+                return h.view('error404')
+            } catch(e) {
+                return h.view('error404')
             }
         }
     },
