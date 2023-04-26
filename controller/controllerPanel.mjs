@@ -5,8 +5,6 @@ import Fs from "fs"
 
 import {dealDao} from "../dao/dealDao.mjs";
 
-import jwt from "jsonwebtoken"
-
 export const panelController = {
 
     login : async(login,password) => {
@@ -77,9 +75,16 @@ export const panelController = {
     addDeal : async (payload,token) => {
       try {
         const img = payload.nom+Math.floor(Math.random()*(1000))
+        let ext =""
+        if (payload.image.headers['content-type']=='image/png') {
+          ext = ".png"
+        } else {
+          ext = ".jpg"
+        }
         const readStream = Fs.createReadStream(payload.image.path);
-        const fileStream = Fs.createWriteStream("img/"+img);
+        const fileStream = Fs.createWriteStream("img/"+img+ext);
         await  readStream.pipe(fileStream);
+        console.log(payload.image)
         let response=await fetch(process.env.URL+"/deals",{
           method : "POST",
           headers: {
@@ -94,13 +99,14 @@ export const panelController = {
             promo:Number(payload.promo),
             date:new Date().toISOString(),
             detail:"string",
-            imgId:img,
+            imgId:img+ext,
             urlWeb:payload.urlweb,
         }),
          })
          response = await response.json();
          return response
       }catch (e) {
+        console.log(e)
         return Promise.reject({message: "error"})
       }
     },
@@ -156,7 +162,13 @@ export const panelController = {
     addCategorie : async (payload,token) => {
       try {
         const img = payload.nom+Math.floor(Math.random()*(1000))
-        const fileStream = Fs.createWriteStream("img/"+img);
+        let ext =""
+        if (payload.image.headers['content-type']=='image/png') {
+          ext = ".png"
+        } else {
+          ext = ".jpg"
+        }
+        const fileStream = Fs.createWriteStream("img/"+img+ext);
         const readStream = Fs.createReadStream(payload.image.path);
         await  readStream.pipe(fileStream);
         let response=await fetch(process.env.URL+"/categories",{
@@ -168,7 +180,7 @@ export const panelController = {
           },
           body : JSON.stringify({
             nom:payload.nom,
-            imgId:img,
+            imgId:img+ext,
         }),
          })
          response = await response.json();
@@ -214,6 +226,41 @@ export const panelController = {
             }
           })
          }
+         return response
+      }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
+    addArticle : async (payload,token) => {
+      try {
+        const img = payload.titre+Math.floor(Math.random()*(1000))
+        let ext =""
+        if (payload.image.headers['content-type']=='image/png') {
+          ext = ".png"
+        } else {
+          ext = ".jpg"
+        }
+        const fileStream = Fs.createWriteStream("img/"+img+ext);
+        const readStream = Fs.createReadStream(payload.image.path);
+        await  readStream.pipe(fileStream);
+        let response=await fetch(process.env.URL+"/articles",{
+          method : "POST",
+          headers: {
+              'Accept': 'application/json',
+              'token': token,
+              'Content-Type': 'application/json',
+          },
+          body : JSON.stringify({
+            titre  :payload.titre,
+            description :payload.description,
+            contenu :payload.contenu,
+            imgId   :img+ext,
+            tag :payload.tag,
+            tags : payload.tags?payload.tags:"",
+            date : new Date().toISOString(),
+        }),
+         })
+         response = await response.json();
          return response
       }catch (e) {
         return Promise.reject({message: "error"})

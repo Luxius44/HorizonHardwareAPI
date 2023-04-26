@@ -5,11 +5,10 @@ export default class Article {
     titre  
     description 
     contenu 
-    imgId 
-    imgsId  
+    imgId   
     tag 
     tags  
-    data 
+    date 
     constructor(obj) {
         Object.assign(this,obj)
     }

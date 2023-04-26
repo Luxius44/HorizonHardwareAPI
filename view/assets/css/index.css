@@ -323,6 +323,34 @@ a:hover {
   width: 60%;
 }
 
+.addArticle form #editor {
+  background-color: #e4e4e4;
+  color: #131313;
+  margin-top: 0px;
+  height: 500px;
+}
+
+.addArticle form #editor div {
+  margin-top: 0px;
+}
+
+.addArticle #toolbar {
+  background-color: #e4e4e4;
+}
+
+.addArticle form {
+  text-align: center;
+  margin: 30px 10% 0 10%;
+}
+
+.addArticle img {
+ width: 20%;
+}
+
+.addArticle form div {
+  margin-top: 20px;
+}
+
 /* Catégorie */
 
 .categories {
@@ -385,11 +413,24 @@ height: 20%;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap
 }
 
 article{
   font-size: 25px;
   color: #FBAE3B;
   margin-bottom: 20px;
+}
+
+.button {
+  width: 150px;
+  background-color: #fff;
+  color: #000000;
+  margin: auto;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #e4e4e4;
 }
 

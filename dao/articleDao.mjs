@@ -20,11 +20,6 @@ export const articleDao = {
         try {
             const elt = await prisma.article.findUnique({where: {id: id}})
             if (elt!=null) {
-                if ( elt.imgsId.length>0) {
-                    elt.imgsId=elt.imgsId.split(':')
-                } else {
-                    elt.imgsId= []
-                }
                 if (elt.tags.length>0) {
                     elt.tags=elt.tags.split(':')
                 } else {

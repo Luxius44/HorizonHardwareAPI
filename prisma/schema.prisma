@@ -42,7 +42,6 @@ model Article {
   description String
   contenu String
   imgId String
-  imgsId  String
   tag String
   tags  String
   date DateTime

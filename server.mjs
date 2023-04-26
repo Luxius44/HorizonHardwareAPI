@@ -52,7 +52,6 @@ const joiArticle = Joi.object({
     description: Joi.string().required().description("description of the article"),
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
-    imgsId: Joi.string().required().description("ids of the image of the article"),
     tag : Joi.string().required().description("id of the image of the article"),
     tags : Joi.string().required().description("ids of the other images of the article"),
     date : Joi.date().required().description("date of the release")
@@ -64,7 +63,6 @@ const joiArticleUsable = Joi.object({
     description: Joi.string().required().description("description of the article"),
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
-    imgsId: Joi.array().items(Joi.string()).required().description("ids of the image of the article"),
     tag : Joi.string().required().description("principal tag the article"),
     tags : Joi.array().items(Joi.string()).required().description("tags of the article"),
     date : Joi.date().iso().required().description("date of the release")
@@ -77,7 +75,6 @@ const joiArticleAdd = Joi.object({
     description: Joi.string().required().description("description of the article"),
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
-    imgsId: Joi.string().required().allow(null, '').description("ids of the image of the article"),
     tag : Joi.string().required().description("id of the image of the article"),
     tags : Joi.string().required().allow(null, '').description("ids of the other images of the article"),
     date : Joi.date().iso().required().description("date of the release")
@@ -1171,6 +1168,56 @@ const routes =[
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
                 return h.view('articles',{articles:await panelController.articles()})
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/addArticle',
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('articlesAdd')
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/addArticle',
+        options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
+            validate : {
+                payload : Joi.object({
+                    titre: Joi.string().required(),
+                    description :Joi.string().required(),
+                    tag:Joi.string().required(),
+                    contenu:Joi.string().required(),
+                  }).options({ allowUnknown: true }),
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                if (!request.payload.image) {
+                    return h.view('articlesAdd',{message:"Tu as oublier de mettre une image"})           
+                }
+                await panelController.addArticle(request.payload,request.session.views)
+                return h.redirect('/panel/articles',{articles:await panelController.articles()})           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
