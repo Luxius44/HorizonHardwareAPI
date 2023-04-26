@@ -381,6 +381,7 @@ a:hover {
   gap: 20px;
   align-items: center;
   margin-top: 30px;
+  text-align: center;
 }
 
 .addCategorie img {
@@ -402,6 +403,7 @@ a:hover {
  flex-direction: column;
  align-items: center;
  gap: 20px;
+ text-align: center;
 }
 
 .addDeal img {

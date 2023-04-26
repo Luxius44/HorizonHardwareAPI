@@ -25,11 +25,11 @@
         <article>Ajout Categorie :</article>
         <div>
             <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom">
+            <input type="text" id="nom" name="nom" required>
         </div>
         <div>
             <label for="image">Image :</label>
-            <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()">
+            <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()" required>
         </div>
         <img id="image-preview" src="#" alt="Image preview">
         <button type="submit" value="Add Categorie">Add Categorie</button>

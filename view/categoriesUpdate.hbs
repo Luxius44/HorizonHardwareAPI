@@ -21,17 +21,38 @@
         </div>
     </div>
 
-    <form class="addDeal" action="/panel/updateCategorie/{{categorie.id}}" method="POST">
+    <form class="addDeal" action="/panel/updateCategorie/{{categorie.id}}" method="POST" enctype="multipart/form-data">
         <article> Modification Categorie {{categorie.nom}}:</article>
         <div>
             <label for="nom">Nom :</label>
             <input required type="text" id="nom" name="nom" value="{{categorie.nom}}">
         </div>
+        <div>
+            <label for="image">Changement Image :</label>
+            <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()">
+        </div>
+        <img id="image-preview" src="#" alt="Image preview">
         <input style="display: none;" required type="text" name="imgId" value="{{categorie.imgId}}">
 
         <button type="submit" value="Add Deal">Update Categorie</button>
         <a href="/panel/categories">Cancel ?</a>
         {{message}}
     </form>
+
+    <script>
+    function previewImage() {
+        var preview = document.querySelector('#image-preview');
+        var file = document.querySelector('#image').files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+            preview.src = reader.result;
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
 </body>
 </html>

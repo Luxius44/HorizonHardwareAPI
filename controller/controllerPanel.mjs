@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import Fs from "fs"
 
 import {dealDao} from "../dao/dealDao.mjs";
+import {articleDao} from "../dao/articleDao.mjs"
 
 export const panelController = {
 
@@ -84,7 +85,6 @@ export const panelController = {
         const readStream = Fs.createReadStream(payload.image.path);
         const fileStream = Fs.createWriteStream("img/"+img+ext);
         await  readStream.pipe(fileStream);
-        console.log(payload.image)
         let response=await fetch(process.env.URL+"/deals",{
           method : "POST",
           headers: {
@@ -106,13 +106,17 @@ export const panelController = {
          response = await response.json();
          return response
       }catch (e) {
-        console.log(e)
         return Promise.reject({message: "error"})
       }
     },
     updateDeal : async (payload,id,token) => {
       try {
         const deal = await dealDao.findById(id)
+        if (payload.image.bytes!=0) {
+          const fileStream = Fs.createWriteStream("img/"+deal.imgId);
+          const readStream = Fs.createReadStream(payload.image.path);
+          await  readStream.pipe(fileStream);
+        }
         let response = await fetch(process.env.URL+"/deals/"+id,{
           method : "PUT",
           headers: {
@@ -191,6 +195,11 @@ export const panelController = {
     },
     updateCategorie : async (payload,id,token) => {
       try {
+        if (payload.image.bytes!=0) {
+          const fileStream = Fs.createWriteStream("img/"+payload.imgId);
+          const readStream = Fs.createReadStream(payload.image.path);
+          await  readStream.pipe(fileStream);
+        }
         let response = await fetch(process.env.URL+"/categories/"+id,{
           method : "PUT",
           headers: {
@@ -266,6 +275,38 @@ export const panelController = {
         return Promise.reject({message: "error"})
       }
     },
+    updateArticle : async (payload,id,token) => {
+      try {
+        const article = await articleDao.findById(id)
+        if (payload.image.bytes!=0) {
+          const fileStream = Fs.createWriteStream("img/"+article.imgId);
+          const readStream = Fs.createReadStream(payload.image.path);
+          await  readStream.pipe(fileStream);
+        }
+        
+        let response=await fetch(process.env.URL+"/articles/"+id,{
+          method : "PUT",
+          headers: {
+              'Accept': 'application/json',
+              'token': token,
+              'Content-Type': 'application/json',
+          },
+          body : JSON.stringify({
+            titre  :payload.titre,
+            description :payload.description,
+            contenu :payload.contenu,
+            imgId   :article.imgId,
+            tag :payload.tag,
+            tags : payload.tags?payload.tags:"",
+            date : new Date().toISOString(),
+        }),
+         })
+         response = await response.json();
+         return response
+      }catch (e) {
+        return Promise.reject({message: "error"})
+      }
+    },
     deleteArticles : async (id,token) => {
       try {
         let response=await fetch(process.env.URL+"/articles/"+id,{
@@ -276,6 +317,13 @@ export const panelController = {
           },
          })
          response = await response.json();
+         if (response.imgId) {
+          Fs.unlink("img/"+response.imgId, (err) => {
+            if (err) {
+              return;
+            }
+          })
+         }
          return response
       }catch (e) {
         return Promise.reject({message: "error"})

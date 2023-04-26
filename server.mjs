@@ -986,6 +986,12 @@ const routes =[
         method : 'POST',
         path : '/panel/updateDeal/{id}',
         options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
             validate : {
                 params : Joi.object({id: Joi.number().integer()}),
                 payload : Joi.object({
@@ -993,7 +999,7 @@ const routes =[
                     prix: Joi.string().required(),
                     promo: Joi.string().required(),
                     urlweb: Joi.string().required(),
-                  })
+                  }).options({ allowUnknown: true }),
             }
         },
         handler :async (request,h) =>{
@@ -1116,12 +1122,18 @@ const routes =[
         method : 'POST',
         path : '/panel/updateCategorie/{id}',
         options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
             validate : {
                 params : Joi.object({id: Joi.number().integer()}),
                 payload : Joi.object({
                     nom: Joi.string().required(),
                     imgId: Joi.string().required(),
-                  })
+                  }).options({ allowUnknown: true }),
             }
         },
         handler :async (request,h) =>{
@@ -1218,6 +1230,59 @@ const routes =[
                 }
                 await panelController.addArticle(request.payload,request.session.views)
                 return h.redirect('/panel/articles',{articles:await panelController.articles()})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/updateArticle/{id}',
+        options: {
+            validate : {
+                params : Joi.object({id:Joi.number().integer()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('articlesUpdate',{article: await articleController.findById(request.params.id)  })           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/updateArticle/{id}',
+        options : {
+            payload: {
+                output: 'file',
+                parse: true,
+                multipart: true,
+                allow: 'multipart/form-data',
+            },
+            validate : {
+                params : Joi.object({id: Joi.number().integer()}),
+                payload : Joi.object({
+                    titre: Joi.string().required(),
+                    description :Joi.string().required(),
+                    tag:Joi.string().required(),
+                    contenu:Joi.string().required(),
+                  }).options({ allowUnknown: true }),
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                await panelController.updateArticle(request.payload,request.params.id,request.session.views)
+                return h.redirect('/panel/articles')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
