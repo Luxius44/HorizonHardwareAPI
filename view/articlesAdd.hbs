@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/css" rel="stylesheet">
+
+    <!-- Main Quill library -->
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- Theme included stylesheets -->
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+
+    <title>Hardware Horizon | Articles</title>
+</head>
+<body>
+
+     <div class="navbar">
+        <div class="logo">
+            <a href="/panel/home"><img src="/public/img/logo" alt=""></a>
+        </div>
+        <div class="lien">
+            <a href="/panel/deals">Deals</a>
+            <a href="/panel/categories">Catégories</a>
+            <a href="/panel/articles">Articles</a>
+            <a href="/panel/autres">Autres</a>
+        </div>
+    </div>
+
+    <div class="addArticle">
+        <form action="/panel/addArticle" id="form" method="POST" enctype="multipart/form-data">
+        <article>Ajout Article :</article>
+        <div>
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" required>
+        </div>
+        <div>
+            <label for="description">Description :</label>
+            <input type="text" id="description" name="description" required>
+        </div>
+        <div>
+            <label for="Tag">Tag :</label>
+            <input type="text" id="tag" name="tag" required>
+        </div>
+        <div>
+            <label for="Tag">Tags :</label>
+            <input type="text" id="tags" name="tags" value="">
+        </div>
+        <div>
+            <label for="image">Image :</label>
+            <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()" required>
+        </div>
+        <div>
+            {{message}}
+            <img id="image-preview" src="#" alt="Image preview">
+        </div>
+        <div>
+            <input type="text" id="contenu" name="contenu" hidden required>
+        </div>
+        <div id="toolbar"></div>
+        <div id="editor"></div>
+        <div class="button" onclick="soumettreFormulaire()">Add Article</div>
+        <div>
+            <a href="/panel/articles">Cancel ?</a>
+        </div>
+        </form>
+    </div>
+
+    <script>
+
+        var toolbarOptions = [
+        ['bold','italic','underline','strike'],
+        ['blockquote','code-block'],
+        [{'header':1},{'header':2}]
+        [{'list' :'ordered'},{'list':'bullet'}],
+        [{'script':'sub'},{'script':'super'}],
+        [{'indet':'-1'},{'indent':'+1'}],
+        [{'direction':'rtl'}],
+        [{'size':['small',false,'large','huge']}],
+        ['link','image','video'],
+        [{'color':[]},{'background':[]}],
+        [{'font':[]}],
+        [{'align':[]}],
+        ];
+
+        var editor = new Quill('#editor',{
+          modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'A toi de jouer Kim...',
+        theme: 'snow'
+        });
+    </script>
+
+    <script>
+    function previewImage() {
+        var preview = document.querySelector('#image-preview');
+        var file = document.querySelector('#image').files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+            preview.src = reader.result;
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function soumettreFormulaire() {
+        var quillContenu = document.getElementById('editor').innerHTML;
+        var quillString = JSON.stringify(quillContenu);
+        document.getElementById('contenu').value = quillString;
+        var form = document.getElementById("form");
+        if ( form.checkValidity()) {
+            form.submit();
+        } else {
+            alert("Veuillez remplir tous les champs obligatoires avant de soumettre")
+        }
+    }
+    </script>
+
+</body>
+</html>
