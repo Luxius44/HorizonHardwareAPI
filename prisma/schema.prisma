@@ -46,3 +46,7 @@ model Article {
   tags  String
   date DateTime
 }
+
+model Tag {
+  nom String @id
+}

@@ -9,6 +9,7 @@ import HapiSwagger from 'hapi-swagger';
 
 import ServerSession from 'hapi-server-session';
 import jwt from "jsonwebtoken"
+import Fs from "fs"
 
 import {adminController} from "./controller/controllerAdmin.mjs";
 import {categorieController} from "./controller/controllerCategorie.mjs";
@@ -16,7 +17,9 @@ import {dealController} from "./controller/controllerDeal.mjs";
 import {articleController} from "./controller/controllerArticle.mjs";
 import {contactController} from "./controller/controllerContact.mjs"
 import {panelController} from "./controller/controllerPanel.mjs"
-
+import {tagController} from "./controller/controllerTag.mjs";
+import { handler } from '@hapi/hapi/lib/cors.js';
+import { request } from 'http';
 
 // Shcéma Joi :
 
@@ -104,6 +107,9 @@ const joiDealAdd = Joi.object({
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })
+
+const joiTag = Joi.object({nom:Joi.string().required().description("name of the tag")})
+const joiTags = Joi.array().items(joiTag).description("Collection of tags")
 
 const joiId = Joi.object({id : Joi.number().integer().required().description("id of the object")})
 
@@ -805,6 +811,30 @@ const routes =[
             }
         }
     },
+    // Tags : 
+    {
+        method : 'GET',
+        path : '/tags',
+        options: {
+            description : 'Return all Tags',
+            notes : 'Returns all tags',
+            tags : ['api'],
+            response: {
+                status : {
+                    200 : joiTags,
+                    400 : errorMessage,
+                }
+            }
+        },
+        
+        handler : async (request,h)=> {
+            try {
+                return h.response(await tagController.findAll()).code(200)
+            }catch(e) {
+                return h.response({message:'error'}).code(400)
+            }
+        }
+    },
     // Public :
     {
         method: 'GET',
@@ -1312,13 +1342,101 @@ const routes =[
     {
         method : 'GET',
         path : '/panel/autres',
-        handler :(request,h) =>{
+        handler :async (request,h) =>{
             try {
                 const reponse = verifyToken(request.session.views)
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('autres')
+                let fichiers = ""
+                Fs.readdir(process.env.PATH3, function(err, fichier) {
+                    if (err) {
+                      console.error('Erreur lors de la lecture du répertoire :', err);
+                      return;
+                    }
+                    fichiers=fichier
+                });
+                return h.view('autres',{tags: await tagController.findAll(),images:fichiers})
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/addTag',
+        handler : (request,h)=> {
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('tagAdd')
+            } catch (e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/addTag',
+        options : {
+            validate : {
+                payload : joiTag
+            }
+        },
+        handler : async (request,h)=> {
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                await tagController.add(request.payload,request.session.views)
+                return h.redirect('/panel/autres')           
+            } catch (e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteTag/{nom}',
+        options: {
+            validate : {
+                params : joiTag
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const response =await tagController.delete(request.params.nom,request.session.views)
+                return h.redirect('/panel/autres')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteImage/{nom}',
+        options : {
+            validate : {
+                params : Joi.object({nom:Joi.string().required()})
+            }
+        },
+        handler : async (request,h) => {
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                Fs.unlink(process.env.PATH3+"/"+request.params.nom, (err) => {
+                    if (err) throw err;
+                  });
+                return h.redirect('/panel/autres')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }

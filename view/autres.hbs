@@ -20,3 +20,35 @@
             <a href="/panel/autres">Autres</a>
         </div>
     </div>
+
+    <div class="autres">
+        <article>Tags</article>
+        <div>
+            <p>Ajoutez un nouveau Tag : <a href="/panel/addTag">ADD Tag</a></p>
+            <div class="tags">
+            {{#each tags}}
+                <div class="tag">
+                    <p>{{this.nom}}</p>
+                    <a href="/panel/deleteTag/{{this.nom}}">X</a>
+                </div>
+            {{/each}}
+            </div>
+        </div>
+        <article>Images</article>
+        <div class="images">
+            {{#each images}}
+                <div class="image">
+                    <img src="/img/{{this}}" alt="">
+                    <p>{{this}}</p>
+                    <a href="/panel/deleteImage/{{this}}">DELETE</a>
+                </div>
+            {{/each}}
+        </div>
+        <article>Admins</article>
+        <div>
+            <p>Ajoutez un nouveau Admin : <a href="">ADD Admin</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

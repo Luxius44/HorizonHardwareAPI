@@ -436,3 +436,48 @@ article{
   background-color: #e4e4e4;
 }
 
+/* Autres */
+
+.autres {
+  text-align: center;
+  display : flex;
+  flex-direction: column;
+}
+
+.autres article {
+  margin-top: 35px;
+}
+
+.images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image {
+  width: 200px;
+  text-align: center;
+}
+
+.image img {
+  width: 40%;
+}
+
+.tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.tag {
+  width: 150px;
+  background-color: #28282d;
+  display: flex;
+}
+
+.tag p {
+  width: 90%;
+}
