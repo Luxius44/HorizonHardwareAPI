@@ -1224,7 +1224,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('articlesAdd')
+                return h.view('articlesAdd',{tags: await tagController.findAll()})
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }
@@ -1279,7 +1279,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                return h.view('articlesUpdate',{article: await articleController.findById(request.params.id)  })           
+                return h.view('articlesUpdate',{article: await articleController.findById(request.params.id),tags: await tagController.findAll()})           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }

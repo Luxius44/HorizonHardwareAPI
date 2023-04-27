@@ -44,11 +44,20 @@
         </div>
         <div>
             <label for="Tag">Tag :</label>
-            <input type="text" id="tag" name="tag" required>
+            <input type="text" id="tag" name="tag" list="tagz" required>
+            <datalist id="tagz">
+                {{#each tags}}
+                    <option value="{{this.nom}}">
+                {{/each}}
+            </datalist>
         </div>
         <div>
             <label for="Tag">Tags :</label>
-            <input type="text" id="tags" name="tags" value="">
+            <input style="display: none;" type="text" id="tags" name="tags" value="">
+            <div class="button" onclick="addTags()">Add Tag</div>
+        </div>
+        <div class="inputs" id="inputs">
+
         </div>
         <div>
             <label for="image">Image :</label>
@@ -97,6 +106,9 @@
     </script>
 
     <script>
+
+    let compteurInputs = 0;
+
     function previewImage() {
         var preview = document.querySelector('#image-preview');
         var file = document.querySelector('#image').files[0];
@@ -112,6 +124,10 @@
     }
 
     function soumettreFormulaire() {
+        const input = document.getElementById('tags');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").children).map(input => input.value).join(':');
+        input.value = valeursDynamiques
+        console.log(valeursDynamiques)
         var quillContenu = document.getElementById('editor').innerHTML;
         var quillString = JSON.stringify(quillContenu);
         document.getElementById('contenu').value = quillString;
@@ -121,6 +137,14 @@
         } else {
             alert("Veuillez remplir tous les champs obligatoires avant de soumettre")
         }
+    }
+
+    function addTags() {
+        const nouvelInput = document.createElement('input');
+        nouvelInput.type = 'text';
+        nouvelInput.name=`champ-${compteurInputs++}`
+        nouvelInput.setAttribute('list', 'tagz');
+        document.getElementById("inputs").appendChild(nouvelInput);
     }
     </script>
 

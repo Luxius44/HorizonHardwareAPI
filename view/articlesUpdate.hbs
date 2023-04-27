@@ -43,8 +43,13 @@
             <input type="text" id="description" name="description" required value="{{article.description}}">
         </div>
         <div>
-            <label for="Tag">Tag :</label>
-            <input type="text" id="tag" name="tag" required value="{{article.tag}}">
+             <label for="Tag">Tag :</label>
+            <input type="text" id="tag" name="tag" list="tagz" required value="{{article.tag}}">
+            <datalist id="tagz">
+                {{#each tags}}
+                    <option value="{{this.nom}}">
+                {{/each}}
+            </datalist>
         </div>
         <div>
             <label for="Tag">Tags :</label>

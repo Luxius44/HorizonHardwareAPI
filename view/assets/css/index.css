@@ -351,6 +351,13 @@ a:hover {
   margin-top: 20px;
 }
 
+.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Catégorie */
 
 .categories {
