@@ -488,3 +488,30 @@ article{
 .tag p {
   width: 90%;
 }
+
+.admins {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.admin {
+  display: flex;
+  background-color: #28282d;
+  width: 250px;
+  height: 80px;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: auto;
+}
+
+.admin p{
+  overflow: hidden;
+}
+
+.admin div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

@@ -127,7 +127,6 @@
         const input = document.getElementById('tags');
         const valeursDynamiques = Array.from(document.getElementById("inputs").children).map(input => input.value).join(':');
         input.value = valeursDynamiques
-        console.log(valeursDynamiques)
         var quillContenu = document.getElementById('editor').innerHTML;
         var quillString = JSON.stringify(quillContenu);
         document.getElementById('contenu').value = quillString;

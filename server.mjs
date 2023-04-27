@@ -1356,7 +1356,7 @@ const routes =[
                     }
                     fichiers=fichier
                 });
-                return h.view('autres',{tags: await tagController.findAll(),images:fichiers})
+                return h.view('autres',{tags: await tagController.findAll(),images:fichiers,admins:await adminController.findAll(request.session.views)})
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
             }

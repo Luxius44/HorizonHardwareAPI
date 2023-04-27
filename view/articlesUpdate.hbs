@@ -53,7 +53,11 @@
         </div>
         <div>
             <label for="Tag">Tags :</label>
-            <input type="text" id="tags" name="tags" value="{{article.tags}}">
+            <input style="display: none;" type="text" id="tags" name="tags" value="{{article.tags}}">
+            <div class="button" onclick="addTags()">Add Tag</div>
+        </div>
+        <div class="inputs" id="inputs">
+
         </div>
         <div>
             <label for="image">Changement Image :</label>
@@ -76,6 +80,9 @@
     </div>
 
     <script>
+
+        let compteurInputs = 0;
+
 
         var toolbarOptions = [
         ['bold','italic','underline','strike'],
@@ -102,9 +109,20 @@
         var delta = editor.clipboard.convert(document.getElementById('contenu').value.replace(/^"(.*)"$/, '$1'));
         editor.setContents(delta);
         document.getElementById('tags').value=document.getElementById('tags').value.replace(/,/g, ":");
-    </script>
 
-    <script>
+
+        const elts = document.getElementById('tags').value.split(':')
+
+        elts.forEach(function(elt){
+            const nouvelInput = document.createElement('input');
+            nouvelInput.type = 'text';
+            nouvelInput.name=`champ-${compteurInputs++}`;
+            nouvelInput.setAttribute('value',elt);
+            nouvelInput.setAttribute('list', 'tagz');
+            document.getElementById("inputs").appendChild(nouvelInput);
+        })
+
+
     function previewImage() {
         var preview = document.querySelector('#image-preview');
         var file = document.querySelector('#image').files[0];
@@ -120,6 +138,10 @@
     }
 
     function soumettreFormulaire() {
+        const input = document.getElementById('tags');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").children).map(input => input.value).join(':');
+        input.value = valeursDynamiques
+
         var quillContenu = document.getElementById('editor').innerHTML;
         var quillString = JSON.stringify(quillContenu);
         document.getElementById('contenu').value = quillString;
@@ -130,6 +152,15 @@
             alert("Veuillez remplir tous les champs obligatoires avant de soumettre")
         }
     }
+
+    function addTags() {
+        const nouvelInput = document.createElement('input');
+        nouvelInput.type = 'text';
+        nouvelInput.name=`champ-${compteurInputs++}`
+        nouvelInput.setAttribute('list', 'tagz');
+        document.getElementById("inputs").appendChild(nouvelInput);
+    }
+
     </script>
 </body>
 </html>
