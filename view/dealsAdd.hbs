@@ -26,12 +26,13 @@
         <article>Ajout Deal :</article>
         <div>
             <label for="catId">Catégorie *:</label>
-            <input required type="text" id="catId" name="catId" list="categorie">
+            <input required onchange="generateInputs()" type="text" id="catId" name="catId" list="categorie">
             <datalist id="categorie">
                 {{#each categories}}
                     <option value="{{this.id}}:{{this.nom}}">
                 {{/each}}
             </datalist>
+            <div id="categories" data-categories="{{categories}}"></div>
         </div>
 
         <div>
@@ -48,10 +49,18 @@
             <label for="promo">Prix promotionnel *:</label>
             <input required type="number" id="promo" name="promo" step="0.01">
         </div>
+        <div>
+            <label for="nom">Détails :</label>
+            <input type="text" id="detail" name="detail" style="display: none;" value="" required>
+        </div>
+        <div class="inputs" id="inputs">
+
+        </div>
+        <div>
             <label for="image">Image *:</label>
             <input required type="file" id="image" name="image" accept="image/png ,image/jpeg" onchange="previewImage()">
-            <img id="image-preview" src="#" alt="Image preview">
         </div>
+        <img id="image-preview" src="#" alt="Image preview">
 
         <div>
             <label for="urlweb">URL *:</label>
@@ -65,19 +74,42 @@
 </body>
 </html>
 
+{{categories}}
+{{#each categories}}
+    {{this.nom}}
+{{/each}}
 
-<script>
+<script type="text/javascript">
     function previewImage() {
-    var preview = document.querySelector('#image-preview');
-    var file = document.querySelector('#image').files[0];
-    var reader = new FileReader();
+        var preview = document.querySelector('#image-preview');
+        var file = document.querySelector('#image').files[0];
+        var reader = new FileReader();
 
-    reader.addEventListener("load", function () {
-        preview.src = reader.result;
-    }, false);
+        reader.addEventListener("load", function () {
+            preview.src = reader.result;
+        }, false);
 
-    if (file) {
-        reader.readAsDataURL(file);
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     }
-}
+
+    var categories =document.getElementById("categories").getAttribute("data-categories");
+    console.log(categories)
+    
+    function generateInputs() {
+        var category = document.getElementById("catId").value.split(':')[0];
+        var inputs = document.getElementById("inputs");
+    }
+
+    function generateInput(name, value, parent) {
+        var label = document.createElement("label");
+        label.textContent = name + ":";
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = name;
+        input.value = value;
+        parent.appendChild(label);
+        parent.appendChild(input);
+     }
 </script>

@@ -166,37 +166,6 @@ const routes =[
     },
     // Admin :
     {
-        method: 'GET',
-        path: '/admins',
-        options: {
-            description: 'Get All Admins',
-            notes: 'Returns all Admins or an error message',
-            tags: ['api'],
-            validate: {
-               headers: joiToken.options({ allowUnknown: true }),
-            },
-            response: {
-                status : {
-                    201 : joiAdminsToken,
-                    400 : errorMessage,
-                    404 : tokenNotFound
-                }
-            }
-        },
-        
-        handler: async (request, h) => {
-            try {
-                const admins = await adminController.findAll(request.headers.token)
-                return h.response(admins).code(200)
-            } catch (e) {
-                if (e.message=='not found') {
-                    return h.response({message:"token not found"}).code(404)
-                }
-                return h.response({message:"error"}).code(400)
-            }
-        }
-    },
-    {
         method: 'POST',
         path: '/admins/login',
         options : {
