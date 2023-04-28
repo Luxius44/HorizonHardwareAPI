@@ -184,6 +184,7 @@ export const panelController = {
           },
           body : JSON.stringify({
             nom:payload.nom,
+            detail:payload.detail,
             imgId:img+ext,
         }),
          })
@@ -209,6 +210,7 @@ export const panelController = {
           },
           body : JSON.stringify({
             nom: payload.nom,
+            detail : payload.detail,
             imgId:payload.imgId,
         }),
         })

@@ -25,7 +25,7 @@
     <form class="addDeal" action="/panel/addDeal" method="POST" enctype="multipart/form-data">
         <article>Ajout Deal :</article>
         <div>
-            <label for="catId">Catégorie :</label>
+            <label for="catId">Catégorie *:</label>
             <input required type="text" id="catId" name="catId" list="categorie">
             <datalist id="categorie">
                 {{#each categories}}
@@ -35,26 +35,26 @@
         </div>
 
         <div>
-            <label for="nom">Nom :</label>
+            <label for="nom">Nom *:</label>
             <input required type="text" id="nom" name="nom">
         </div>
 
         <div>
-            <label for="prix">Prix :</label>
+            <label for="prix">Prix *:</label>
             <input required type="number" id="prix" name="prix" step="0.01">
         </div>
 
         <div>
-            <label for="promo">Prix promotionnel :</label>
+            <label for="promo">Prix promotionnel *:</label>
             <input required type="number" id="promo" name="promo" step="0.01">
         </div>
-            <label for="image">Image :</label>
+            <label for="image">Image *:</label>
             <input required type="file" id="image" name="image" accept="image/png ,image/jpeg" onchange="previewImage()">
             <img id="image-preview" src="#" alt="Image preview">
         </div>
 
         <div>
-            <label for="urlweb">URL :</label>
+            <label for="urlweb">URL *:</label>
             <input required type="text" id="urlweb" name="urlweb">
         </div>
 

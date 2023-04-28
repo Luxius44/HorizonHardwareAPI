@@ -24,22 +24,22 @@
     <form class="addDeal" action="/panel/updateDeal/{{deal.id}}" method="POST" enctype="multipart/form-data">
         <article> Modification Deal {{deal.nom}}:</article>
         <div>
-            <label for="nom">Nom :</label>
+            <label for="nom">Nom *:</label>
             <input required type="text" id="nom" name="nom" value="{{deal.nom}}">
         </div>
 
         <div>
-            <label for="prix">Prix :</label>
+            <label for="prix">Prix *:</label>
             <input required type="number" id="prix" name="prix" step="0.01" value="{{deal.prix}}">
         </div>
 
         <div>
-            <label for="promo">Prix promotionnel :</label>
+            <label for="promo">Prix promotionnel *:</label>
             <input required type="number" id="promo" name="promo" step="0.01" value="{{deal.promo}}">
         </div>
 
         <div>
-            <label for="urlweb">URL :</label>
+            <label for="urlweb">URL *:</label>
             <input required type="text" id="urlweb" name="urlweb" value="{{deal.urlWeb}}">
         </div>
         <div>

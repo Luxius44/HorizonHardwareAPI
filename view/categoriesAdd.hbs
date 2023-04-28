@@ -24,16 +24,24 @@
     <form class="addCategorie" action="/panel/addCategorie" method="POST" enctype="multipart/form-data">
         <article>Ajout Categorie :</article>
         <div>
-            <label for="nom">Nom :</label>
+            <label for="nom">Nom *:</label>
             <input type="text" id="nom" name="nom" required>
         </div>
         <div>
-            <label for="image">Image :</label>
+            <label for="nom">Détails :</label>
+            <input type="text" id="detail" name="detail" style="display: none;" value="">
+            <div class="button" onclick="addDetail()">Add Detail</div>
+        </div>
+        <div class="inputs" id="inputs">
+
+        </div>
+        <div>
+            <label for="image">Image *:</label>
             <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()" required>
         </div>
         <img id="image-preview" src="#" alt="Image preview">
-        <button type="submit" value="Add Categorie">Add Categorie</button>
-        <a href="/panel/categoires">Cancel ?</a>
+        <button onclick="soumettreFormulaire()" value="Add Categorie">Add Categorie</button>
+        <a href="/panel/categories">Cancel ?</a>
         {{message}}
     </form>
 </body>
@@ -54,4 +62,25 @@
         reader.readAsDataURL(file);
     }
 }
+
+    let compteurInputs = 0;
+
+function soumettreFormulaire() {
+        const input = document.getElementById('detail');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").children).map(input => input.value).join(':');
+        input.value = valeursDynamiques
+        var form = document.getElementById("form");
+        if ( form.checkValidity()) {
+            form.submit();
+        } else {
+            alert("Veuillez remplir tous les champs obligatoires avant de soumettre")
+        }
+    }
+
+    function addDetail() {
+        const nouvelInput = document.createElement('input');
+        nouvelInput.type = 'text';
+        nouvelInput.name=`champ-${compteurInputs++}`
+        document.getElementById("inputs").appendChild(nouvelInput);
+    }
 </script>

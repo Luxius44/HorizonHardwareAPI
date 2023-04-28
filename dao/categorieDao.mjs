@@ -17,7 +17,16 @@ export const categorieDao = {
     findById : async (id) => {
         try {
             const elt = await prisma.categorie.findUnique({where: {id: id}})
-            return elt == null ? null : new Categorie(elt)
+            if (elt!=null) {
+                if (elt.detail.length>0) {
+                    elt.detail=elt.detail.split(':')
+                } else {
+                    elt.detail = []
+                }
+            } else {
+                return null
+            }
+            return new Categorie(elt)
         } catch (e) {
             return Promise.reject(e)
         }

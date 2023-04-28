@@ -35,15 +35,15 @@
         <form action="/panel/addArticle" id="form" method="POST" enctype="multipart/form-data">
         <article>Ajout Article :</article>
         <div>
-            <label for="titre">Titre :</label>
+            <label for="titre">Titre *:</label>
             <input type="text" id="titre" name="titre" required>
         </div>
         <div>
-            <label for="description">Description :</label>
+            <label for="description">Description *:</label>
             <input type="text" id="description" name="description" required>
         </div>
         <div>
-            <label for="Tag">Tag :</label>
+            <label for="Tag">Tag *:</label>
             <input type="text" id="tag" name="tag" list="tagz" required>
             <datalist id="tagz">
                 {{#each tags}}
@@ -60,7 +60,7 @@
 
         </div>
         <div>
-            <label for="image">Image :</label>
+            <label for="image">Image *:</label>
             <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()" required>
         </div>
         <div>
@@ -72,7 +72,9 @@
         </div>
         <div id="toolbar"></div>
         <div id="editor"></div>
-        <div class="button" onclick="soumettreFormulaire()">Add Article</div>
+        <div>
+            <button onclick="soumettreFormulaire()">Add Article</button>
+        </div>
         <div>
             <a href="/panel/articles">Cancel ?</a>
         </div>
