@@ -18,8 +18,7 @@ import {articleController} from "./controller/controllerArticle.mjs";
 import {contactController} from "./controller/controllerContact.mjs"
 import {panelController} from "./controller/controllerPanel.mjs"
 import {tagController} from "./controller/controllerTag.mjs";
-import { handler } from '@hapi/hapi/lib/cors.js';
-import { request } from 'http';
+
 
 // Shcéma Joi :
 

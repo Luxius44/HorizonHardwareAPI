@@ -32,7 +32,7 @@
                     <option value="{{this.id}}:{{this.nom}}">
                 {{/each}}
             </datalist>
-            <div id="categories" data-categories="{{categories}}"></div>
+            <div id="categories" data-categories="{{#each categories}}{{this.id}},{{this.detail}}{{#unless @last}};{{/unless}}{{/each}}"></div>
         </div>
 
         <div>
@@ -51,7 +51,7 @@
         </div>
         <div>
             <label for="nom">Détails :</label>
-            <input type="text" id="detail" name="detail" style="display: none;" value="" required>
+            <input type="text" id="detail" name="detail" style="display: none;" required>
         </div>
         <div class="inputs" id="inputs">
 
@@ -67,17 +67,12 @@
             <input required type="text" id="urlweb" name="urlweb">
         </div>
 
-        <button type="submit" value="Add Deal">Add Deal</button>
+        <button onclick="soumettreFormulaire()" value="Add Deal">Add Deal</button>
         <a href="/panel/deals">Cancel ?</a>
         {{message}}
     </form>
 </body>
 </html>
-
-{{categories}}
-{{#each categories}}
-    {{this.nom}}
-{{/each}}
 
 <script type="text/javascript">
     function previewImage() {
@@ -95,21 +90,48 @@
     }
 
     var categories =document.getElementById("categories").getAttribute("data-categories");
-    console.log(categories)
+   
+   var categoriesArr = categories.split(";");
+
+    // Créer un objet pour chaque élément du tableau
+    var categoriesObj = {};
+    categoriesArr.forEach(function(item) {
+    var parts = item.split(",");
+    categoriesObj[parts[0]] = parts[1];
+    });
+
+   
+    var inputs = document.getElementById("inputs");
     
     function generateInputs() {
         var category = document.getElementById("catId").value.split(':')[0];
-        var inputs = document.getElementById("inputs");
+        while (inputs.firstChild) {
+            inputs.removeChild(inputs.firstChild);
+        }
+        if (category!=undefined) {
+            categoriesObj[category].split(':').forEach(cat=>generateInput(cat))
+        }
     }
 
-    function generateInput(name, value, parent) {
+    function generateInput(name) {
         var label = document.createElement("label");
         label.textContent = name + ":";
         var input = document.createElement("input");
         input.type = "text";
         input.name = name;
-        input.value = value;
-        parent.appendChild(label);
-        parent.appendChild(input);
+        inputs.appendChild(label);
+        inputs.appendChild(input);
      }
+
+     function soumettreFormulaire() {
+        const input = document.getElementById('detail');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").querySelectorAll('input')).map(input =>input.previousElementSibling.textContent.trim()+input.value).join(";")
+
+        input.value = valeursDynamiques
+
+        var form = document.getElementById("form");
+        if ( form.checkValidity()) {
+            form.submit();
+        }
+    }
 </script>
