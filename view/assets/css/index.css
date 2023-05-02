@@ -378,6 +378,7 @@ a:hover {
 
 .categorie img{
   width: 180px;
+  height: 120px;
   margin-right: 10px;
   object-fit: cover;
 }
@@ -488,6 +489,8 @@ article{
 
 .tag p {
   width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .admins {

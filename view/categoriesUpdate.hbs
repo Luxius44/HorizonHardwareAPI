@@ -54,11 +54,13 @@
         const elts = document.getElementById('detail').value.split(',')
 
          elts.forEach(function(elt){
-            const nouvelInput = document.createElement('input');
-            nouvelInput.type = 'text';
-            nouvelInput.name=`champ-${compteurInputs++}`;
-            nouvelInput.setAttribute('value',elt);
-            document.getElementById("inputs").appendChild(nouvelInput);
+            if (elt!="") {
+                 const nouvelInput = document.createElement('input');
+                nouvelInput.type = 'text';
+                nouvelInput.name=`champ-${compteurInputs++}`;
+                nouvelInput.setAttribute('value',elt);
+                document.getElementById("inputs").appendChild(nouvelInput);
+            }
         })
 
         function previewImage() {
