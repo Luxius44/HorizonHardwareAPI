@@ -37,7 +37,13 @@
             <label for="promo">Prix promotionnel *:</label>
             <input required type="number" id="promo" name="promo" step="0.01" value="{{deal.promo}}">
         </div>
+        <div>
+            <label for="nom">Détails :</label>
+            <input type="text" id="detail" name="detail" style="display: none;" required value="{{deal.detail}}">
+        </div>
+        <div class="inputs" id="inputs">
 
+        </div>
         <div>
             <label for="urlweb">URL *:</label>
             <input required type="text" id="urlweb" name="urlweb" value="{{deal.urlWeb}}">
@@ -47,12 +53,13 @@
             <input type="file" id="image" name="image" accept="image/png,image/jpeg" onchange="previewImage()">
         </div>
         <img id="image-preview" src="#" alt="Image preview">
-        <button type="submit" value="Add Deal">Update Deal</button>
+        <button onclick="soumettreFormulaire()" value="Add Deal">Update Deal</button>
         <a href="/panel/deals">Cancel ?</a>
         {{message}}
     </form>
 
     <script>
+
     function previewImage() {
         var preview = document.querySelector('#image-preview');
         var file = document.querySelector('#image').files[0];
@@ -64,6 +71,38 @@
 
         if (file) {
             reader.readAsDataURL(file);
+        }
+    }
+
+    var inputs = document.getElementById("inputs");
+    var detail = document.getElementById('detail').value.split(";");
+   
+    detail.forEach(elt =>{
+        const temp = elt.split(':')
+        generateInput(temp[0],temp[1])
+        
+    });
+
+    function generateInput(cat,rep) {
+        if (cat!="") {
+            var label = document.createElement("label");
+            label.textContent = cat + ":";
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = cat;
+            input.setAttribute('value',rep)
+            inputs.appendChild(label);
+            inputs.appendChild(input);
+        }
+     }
+
+    function soumettreFormulaire() {
+        const input = document.getElementById('detail');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").querySelectorAll('input')).map(input =>input.previousElementSibling.textContent.trim()+input.value).join(";")
+        input.value = valeursDynamiques
+        var form = document.getElementById("form");
+        if ( form.checkValidity()) {
+            form.submit();
         }
     }
     </script>
