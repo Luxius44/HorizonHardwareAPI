@@ -46,7 +46,7 @@ const joiCategories = Joi.array().items(joiCategorie).description("Collection of
 
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
-    detail : Joi.string().required().description("attribut of the categorie").allow(''),
+    detail : Joi.string().required().description("attribut of the categorie").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie")
 })
 

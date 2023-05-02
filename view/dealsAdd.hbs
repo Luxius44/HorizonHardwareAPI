@@ -128,9 +128,7 @@
      function soumettreFormulaire() {
         const input = document.getElementById('detail');
         const valeursDynamiques = Array.from(document.getElementById("inputs").querySelectorAll('input')).map(input =>input.previousElementSibling.textContent.trim()+input.value).join(";")
-
         input.value = valeursDynamiques
-
         var form = document.getElementById("form");
         if ( form.checkValidity()) {
             form.submit();

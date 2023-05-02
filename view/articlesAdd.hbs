@@ -127,7 +127,10 @@
 
     function soumettreFormulaire() {
         const input = document.getElementById('tags');
-        const valeursDynamiques = Array.from(document.getElementById("inputs").children).map(input => input.value).join(':');
+        const valeursDynamiques = Array.from(document.getElementById("inputs").children)
+                .map(input => input.value.trim()) // supprime les espaces en début et fin de la valeur
+                .filter(value => value !== undefined && value !== "") // filtre les valeurs vides
+                .join(':'); 
         input.value = valeursDynamiques
         var quillContenu = document.getElementById('editor').innerHTML;
         var quillString = JSON.stringify(quillContenu);
