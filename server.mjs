@@ -46,7 +46,7 @@ const joiCategories = Joi.array().items(joiCategorie).description("Collection of
 
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
-    detail : Joi.string().required().description("attribut of the categorie"),
+    detail : Joi.string().required().description("attribut of the categorie").allow(''),
     imgId: Joi.string().required().description("id of the image of the categorie")
 })
 
@@ -1091,7 +1091,7 @@ const routes =[
                 if (!request.payload.image) {
                     return h.view('categoriesAdd',{message:"Tu as oublier de mettre une image"})           
                 }
-                await panelController.addCategorie(request.payload,request.session.views)
+                const rep = await panelController.addCategorie(request.payload,request.session.views)
                 return h.redirect('/panel/categories')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})

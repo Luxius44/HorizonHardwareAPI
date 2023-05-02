@@ -465,6 +465,7 @@ article{
 .image {
   width: 200px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .image img {
