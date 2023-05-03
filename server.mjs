@@ -33,8 +33,6 @@ const joiAdminToken = Joi.object({
     token: Joi.string().required().description("Admin token")
 }).description('Admin with his token')
 
-const joiAdminsToken = Joi.array().items(joiAdminToken).description("Admins with their token")
-
 const joiCategorie = Joi.object({
     id: Joi.number().integer().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
@@ -1029,7 +1027,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const response =await panelController.deleteDeal(request.params.id,request.session.views)
+                await panelController.deleteDeal(request.params.id,request.session.views)
                 return h.redirect('/panel/deals')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1091,7 +1089,7 @@ const routes =[
                 if (!request.payload.image) {
                     return h.view('categoriesAdd',{message:"Tu as oublier de mettre une image"})           
                 }
-                const rep = await panelController.addCategorie(request.payload,request.session.views)
+                await panelController.addCategorie(request.payload,request.session.views)
                 return h.redirect('/panel/categories')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1163,7 +1161,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const response =await panelController.deleteCategories(request.params.id,request.session.views)
+                await panelController.deleteCategories(request.params.id,request.session.views)
                 return h.redirect('/panel/categories')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1302,7 +1300,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const response =await panelController.deleteArticles(request.params.id,request.session.views)
+                await panelController.deleteArticles(request.params.id,request.session.views)
                 return h.redirect('/panel/articles')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1338,7 +1336,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const rep = await adminController.add(request.payload,request.session.views)
+                await adminController.add(request.payload,request.session.views)
                 return h.redirect('/panel/autres')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1380,7 +1378,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const rep = await adminController.update(request.params.login,request.payload,request.session.views)
+                await adminController.update(request.params.login,request.payload,request.session.views)
                 return h.redirect('/panel/autres')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1401,7 +1399,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const response =await adminController.deleteByLogin(request.params.login,request.session.views)
+                await adminController.deleteByLogin(request.params.login,request.session.views)
                 return h.redirect('/panel/autres')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
@@ -1481,7 +1479,7 @@ const routes =[
                 if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
                     return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
                 }
-                const response =await tagController.delete(request.params.nom,request.session.views)
+                await tagController.delete(request.params.nom,request.session.views)
                 return h.redirect('/panel/autres')           
             } catch(e) {
                 return h.view('home',{message:'Une erreur c`est produite !'})
