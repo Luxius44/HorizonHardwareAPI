@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/css" rel="stylesheet">
+    <title>Hardware Horizon | Admin</title>
+
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="/panel/home"><img src="/public/img/logo" alt=""></a>
+        </div>
+        <div class="lien">
+            <a href="/panel/deals">Deals</a>
+            <a href="/panel/categories">Catégories</a>
+            <a href="/panel/articles">Articles</a>
+            <a href="/panel/autres">Autres</a>
+        </div>
+    </div>
+
+    <div class="addAdmin">
+        <form action="/panel/updateAdmin/{{admin.login}}" id="form" method="POST">
+        <article>Update Admin {{this.login}}:</article>
+        <div>
+            <label for="titre">Login *:</label>
+            <input type="text" id="login" name="login" required value="{{admin.login}}">
+        </div>
+        <div>
+            <label for="description">Password *:</label>
+            <input type="password" id="password" name="password" required value="{{admin.password}}">
+        </div>
+        <button type="submit">Update Admin</button>
+        <a href="/panel/autres">Cancel ?</a>
+        </form>
+    </div>
+
+</body>
+</html>

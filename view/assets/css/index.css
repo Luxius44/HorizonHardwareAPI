@@ -508,6 +508,7 @@ article{
   align-items: center;
   justify-content: space-evenly;
   margin: auto;
+  margin-bottom: 20px;
 }
 
 .admin p{
@@ -518,4 +519,16 @@ article{
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+}
+
+.addAdmin {
+  margin-top: 30px;
+}
+
+.addAdmin form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 20px;
+  align-items: center;
 }

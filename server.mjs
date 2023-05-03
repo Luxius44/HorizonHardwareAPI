@@ -1311,6 +1311,105 @@ const routes =[
     },
     {
         method : 'GET',
+        path : '/panel/addAdmin',
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('adminAdd')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/addAdmin',
+        options : {
+            validate : {
+                payload : joiAdmin
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const rep = await adminController.add(request.payload,request.session.views)
+                return h.redirect('/panel/autres')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/updateAdmin/{login}',
+        options: {
+            validate : {
+                params : Joi.object({login: Joi.string().required()}), 
+            },
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                return h.view('adminUpdate',{admin: await adminController.findByLogin(request.params.login,request.session.views)})           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'POST',
+        path : '/panel/updateAdmin/{login}',
+        options : {
+            validate : {
+                params : Joi.object({login: Joi.string().required()}), 
+                payload : joiAdmin
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const rep = await adminController.update(request.params.login,request.payload,request.session.views)
+                return h.redirect('/panel/autres')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
+        path : '/panel/deleteAdmin/{login}',
+        options: {
+            validate : {
+                params : Joi.object({login: Joi.string().required()})
+            }
+        },
+        handler :async (request,h) =>{
+            try {
+                const reponse = verifyToken(request.session.views)
+                if (reponse.message=="A token is required" || reponse.message=="Invalid token") {
+                    return h.view('login',{message:'Erreur dans la création du token. Recommencez !'})
+                }
+                const response =await adminController.deleteByLogin(request.params.login,request.session.views)
+                return h.redirect('/panel/autres')           
+            } catch(e) {
+                return h.view('home',{message:'Une erreur c`est produite !'})
+            }
+        }
+    },
+    {
+        method : 'GET',
         path : '/panel/autres',
         handler :async (request,h) =>{
             try {

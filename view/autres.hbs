@@ -46,14 +46,14 @@
         </div>
         <article>Admins</article>
         <div>
-            <p>Ajoutez un nouveau Admin : <a href="">ADD Admin</a></p>
+            <p>Ajoutez un nouveau Admin : <a href="/panel/addAdmin">ADD Admin</a></p>
             <div class="admins">
             {{#each admins}}
                 <div class="admin">
                     <p>{{this.login}}</p>
                     <div>
-                        <a href="">UPDATE</a><br>
-                        <a href="">DELETE</a>
+                        <a href="/panel/updateAdmin/{{this.login}}">UPDATE</a><br>
+                        <a href="/panel/deleteAdmin/{{this.login}}">DELETE</a>
                     </div>
                 </div>
             {{/each}}

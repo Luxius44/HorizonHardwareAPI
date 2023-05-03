@@ -35,6 +35,17 @@ export const adminController = {
         }
     },
 
+    findByLogin : async (admin,token) => {
+        try {
+            if (!verifyToken(token).login) {
+                return Promise.reject({message: "not found"})
+            }
+            return await adminDao.findByLogin(admin)
+        } catch(e) {
+            return Promise.reject({message: "error"})
+        }
+    },
+
     deleteByLogin: async (login,token) =>{
         try {
             if (!verifyToken(token).login) {
@@ -51,7 +62,9 @@ export const adminController = {
             if (!verifyToken(token).login) {
                 return Promise.reject({message: "not found"})
             }
-            admin.password= bcrypt.hashSync(admin.password,8)
+            if (!admin.password.startsWith('$2')) {
+                admin.password = bcrypt.hashSync(admin.password, 8)
+            }
             return await adminDao.update(login, admin)
         } catch (e) {
             return Promise.reject({message: "error"})
