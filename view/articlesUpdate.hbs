@@ -147,7 +147,7 @@
         var quillContenu = document.getElementById('editor').innerHTML;
         var quillString = JSON.stringify(quillContenu);
         document.getElementById('contenu').value = quillString;
-        var form = document.getElementById("form");
+        var form = document.querySelector("form");
         if ( form.checkValidity()) {
             form.submit();
         } 

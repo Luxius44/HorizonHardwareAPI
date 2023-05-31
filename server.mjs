@@ -30,13 +30,13 @@ const joiAdmin = Joi.object({
 const joiAdminToken = Joi.object({
     login: Joi.string().required().description("login must be unique"),
     password: Joi.string().required().description("must an non-empty "),
-    token: Joi.string().required().description("Admin token")
+    token: Joi.string().required().description("Admin token").allow(null, ''),
 }).description('Admin with his token')
 
 const joiCategorie = Joi.object({
     id: Joi.number().integer().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
-    detail : Joi.string().required().description("attribut of the categorie"),
+    detail : Joi.string().required().description("attribut of the categorie").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie")
 }).description('Categorie')
 
@@ -55,7 +55,7 @@ const joiArticle = Joi.object({
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
     tag : Joi.string().required().description("id of the image of the article"),
-    tags : Joi.string().required().description("ids of the other images of the article"),
+    tags : Joi.string().required().description("ids of the other images of the article").allow(null, ''),
     date : Joi.date().required().description("date of the release")
 }).description('Article')
 
@@ -66,7 +66,7 @@ const joiArticleUsable = Joi.object({
     contenu: Joi.string().required().description("content of the article"),
     imgId: Joi.string().required().description("id of the image of the article"),
     tag : Joi.string().required().description("principal tag the article"),
-    tags : Joi.array().items(Joi.string()).required().description("tags of the article"),
+    tags : Joi.array().items(Joi.string()).required().description("tags of the article").allow(null, ''),
     date : Joi.date().iso().required().description("date of the release")
 }).description('Article')
 
@@ -89,7 +89,7 @@ const joiDeal = Joi.object({
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
     date : Joi.date().iso().required().description("release date of the deal"),
-    detail : Joi.string().required().description("unique information link to this deal"),
+    detail : Joi.string().required().description("unique information link to this deal").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })
@@ -102,7 +102,7 @@ const joiDealAdd = Joi.object({
     prix: Joi.number().required().description("price of the deal"),
     promo: Joi.number().required().description("promo price of the deal"),
     date : Joi.date().iso().required().description("release date of the deal"),
-    detail : Joi.string().required().description("unique information link to this deal"),
+    detail : Joi.string().required().description("unique information link to this deal").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie"),
     urlWeb: Joi.string().required().description("url of the product")
 })

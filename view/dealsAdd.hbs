@@ -127,10 +127,17 @@
 
      function soumettreFormulaire() {
         const input = document.getElementById('detail');
-        const valeursDynamiques = Array.from(document.getElementById("inputs").querySelectorAll('input')).map(input =>input.previousElementSibling.textContent.trim()+input.value).join(";")
-        input.value = valeursDynamiques
-        var form = document.getElementById("form");
+        const valeursDynamiques = Array.from(document.getElementById("inputs").querySelectorAll('input')).map(input =>input.previousElementSibling.textContent.trim()+input.value).join(";")        
+        if (valeursDynamiques=="") {
+            input.value="none"
+        } else {
+            input.value=valeursDynamiques
+        }
+        var form = document.querySelector("form");
         if ( form.checkValidity()) {
+            if(input.value=="none") {
+                input.value=""
+            }
             form.submit();
         }
     }
