@@ -132,8 +132,8 @@
                 .filter(value => value !== undefined && value !== "") // filtre les valeurs vides
                 .join(':'); 
         input.value = valeursDynamiques
-        var quillContenu = document.getElementById('editor').innerHTML;
-        var quillString = JSON.stringify(quillContenu);
+        var quillDelta = editor.getContents();
+        var quillString = JSON.stringify(quillDelta);
         document.getElementById('contenu').value = quillString;
         var form = document.querySelector("form");
         if ( form.checkValidity()) {

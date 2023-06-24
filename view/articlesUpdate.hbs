@@ -106,8 +106,8 @@
         placeholder: 'A toi de jouer Kim...',
         theme: 'snow'
         });
-        var delta = editor.clipboard.convert(document.getElementById('contenu').value.replace(/^"(.*)"$/, '$1'));
-        editor.setContents(delta);
+        var quillDelta = JSON.parse(document.getElementById('contenu').value);
+        editor.setContents(quillDelta);
 
         const elts = document.getElementById('tags').value.split(',')
 
@@ -144,8 +144,8 @@
             .filter(value => value !== undefined && value !== "") // filtre les valeurs vides
             .join(':'); 
         input.value = valeursDynamiques
-        var quillContenu = document.getElementById('editor').innerHTML;
-        var quillString = JSON.stringify(quillContenu);
+        var quillDelta = editor.getContents();
+        var quillString = JSON.stringify(quillDelta);
         document.getElementById('contenu').value = quillString;
         var form = document.querySelector("form");
         if ( form.checkValidity()) {
