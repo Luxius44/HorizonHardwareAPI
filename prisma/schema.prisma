@@ -19,6 +19,7 @@ model Admin {
 model Categorie {
   id    Int @id @default(autoincrement())
   nom   String
+  abreviation String
   detail String
   imgId String
   deals Deal[]

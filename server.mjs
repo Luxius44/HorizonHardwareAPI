@@ -36,6 +36,7 @@ const joiAdminToken = Joi.object({
 const joiCategorie = Joi.object({
     id: Joi.number().integer().required().description("id of the categorie, autoincrement"),
     nom: Joi.string().required().description("name of the categorie"),
+    abreviation : Joi.string().required().description("abreviation of the categorie").allow(null,''),
     detail : Joi.string().required().description("attribut of the categorie").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie")
 }).description('Categorie')
@@ -44,6 +45,7 @@ const joiCategories = Joi.array().items(joiCategorie).description("Collection of
 
 const joiCategorieAdd = Joi.object({
     nom: Joi.string().required().description("name of the categorie"),
+    abreviation : Joi.string().required().description("abreviation of the categorie").allow(null,''),
     detail : Joi.string().required().description("attribut of the categorie").allow(null, ''),
     imgId: Joi.string().required().description("id of the image of the categorie")
 })

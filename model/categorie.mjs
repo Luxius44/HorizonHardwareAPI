@@ -3,6 +3,7 @@
 export default class Categorie {
     id
     nom
+    abreviation
     detail
     imgId
     constructor(obj) {
