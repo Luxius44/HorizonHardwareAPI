@@ -184,6 +184,7 @@ export const panelController = {
           },
           body : JSON.stringify({
             nom:payload.nom,
+            abreviation:payload.abreviation,
             detail:payload.detail==undefined?"":payload.detail,
             imgId:img+ext,
         }),
@@ -210,6 +211,7 @@ export const panelController = {
           },
           body : JSON.stringify({
             nom: payload.nom,
+            abreviation:payload.abreviation,
             detail : payload.detail,
             imgId:payload.imgId,
         }),

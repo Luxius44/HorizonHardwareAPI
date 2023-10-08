@@ -1091,6 +1091,7 @@ const routes =[
                 if (!request.payload.image) {
                     return h.view('categoriesAdd',{message:"Tu as oublier de mettre une image"})           
                 }
+                println("Je passe")
                 await panelController.addCategorie(request.payload,request.session.views)
                 return h.redirect('/panel/categories')           
             } catch(e) {
